@@ -12,7 +12,7 @@ tasks:
   start:
     command: "pnpm run start"
   db-migrate:
-    command: "pnpm prisma migrate dev"
+    command: "pnpm with-env prisma migrate dev"
   db-generate:
     command: "pnpm prisma generate"
   db-studio:

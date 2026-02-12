@@ -51,3 +51,4 @@ lerna-debug.log*
 
 # Keep environment variables out of version control
 generated
+**/*.http
