@@ -1,0 +1,30 @@
+{
+	"name": "api",
+	"type": "module",
+	"scripts": {
+		"dev": "pnpm with-env tsx watch src/index.ts",
+		"build": "tsc",
+		"start": "pnpm with-env node dist/src/index.js",
+		"db:generate": "prisma generate",
+		"db:migrate": "pnpm with-env prisma migrate dev",
+		"db:deploy": "pnpm with-env prisma deploy",
+		"db:studio": "pnpm with-env prisma studio",
+		"with-env": "dotenv -e ../../.env --"
+	},
+	"dependencies": {
+		"@hono/node-server": "^1.19.9",
+		"@prisma/adapter-pg": "^7.3.0",
+		"@prisma/client": "^7.3.0",
+		"dotenv": "^17.2.4",
+		"hono": "^4.11.9",
+		"pg": "^8.18.0",
+		"zod": "^4.3.6"
+	},
+	"devDependencies": {
+		"@types/node": "^20.11.17",
+		"@types/pg": "^8.16.0",
+		"prisma": "^7.3.0",
+		"tsx": "^4.7.1",
+		"typescript": "^5.8.3"
+	}
+}

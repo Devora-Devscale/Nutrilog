@@ -1,0 +1,81 @@
+name: "CI/CD"
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  pr-check:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+
+      - name: Install Dependencies
+        run: pnpm install
+
+      - name: "Lint"
+        run: pnpm lint
+
+  deploy:
+    if: github.event_name == 'push' && github.ref == 'ref/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+
+      - name: Install Dependencies
+        run: pnpm install
+
+      - name: "Lint"
+        run: pnpm lint
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3 # Community action untuk SSH
+        with:
+          host: ${{ secrets.HOST }} # ${{ secrets.X }} = ambil dari GitHub Secrets
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }} # Private key SSH
+          script: |
+            set -e
+
+            APP_DIR=/root/monorepo
+            REPO_URL=${{ github.server_url }}/${{ github.repository }}.git
+
+            echo "==> Create app directory if not exists"
+            mkdir -p $APP_DIR
+            cd $APP_DIR
+
+            if [ ! -d ".git" ]; then
+              echo "==> Cloning repository"
+              git clone $REPO_URL .
+            else
+              echo "==> Updating repository"
+              git fetch origin
+              git reset --hard origin/main
+            fi
+
+            echo "==> Create .env file"
+            cat << 'EOF' > .env
+            ${{ secrets.ENV_FILE }}
+            EOF
+
+            echo "==> Docker compose up"
+            docker compose -f docker-compose.yml down
+            docker compose -f docker-compose.yml pull
+            docker compose -f docker-compose.yml up -d

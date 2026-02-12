@@ -1,0 +1,20 @@
+$schema: "https://moonrepo.dev/schemas/project.json"
+
+project:
+  name: platform
+  description: frontend
+
+dependsOn:
+  - "api"
+
+tasks:
+  dev:
+    command: "pnpm run dev"
+    deps:
+      - "api:dev"
+  build:
+    command: "pnpm build"
+  preview:
+    command: "pnpm preview"
+  test:
+    command: "pnpm test"

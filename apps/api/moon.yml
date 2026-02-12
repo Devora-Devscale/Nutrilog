@@ -1,0 +1,21 @@
+$schema: "https://moonrepo.dev/schemas/project.json"
+
+project:
+  name: api
+  description: backend
+
+tasks:
+  dev:
+    command: "pnpm run dev"
+  build:
+    command: "pnpm run dev"
+  start:
+    command: "pnpm run start"
+  db-migrate:
+    command: "pnpm prisma migrate dev"
+  db-generate:
+    command: "pnpm prisma generate"
+  db-studio:
+    command: "pnpm prisma studio"
+  db-deploy:
+    command: "pnpm prisma deploy"
