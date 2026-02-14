@@ -1,13 +1,10 @@
 import { PrismaPg } from "@prisma/adapter-pg";
-import pkg from "pg";
-
-const { Pool } = pkg;
-
 import { PrismaClient } from "../generated/prisma/index.js";
 
-const pool = new Pool({
+const adapter = new PrismaPg({
 	connectionString: process.env.DATABASE_URL,
 });
-const adapter = new PrismaPg(pool);
 
-export const prisma = new PrismaClient({ adapter });
+export const prisma = new PrismaClient({
+	adapter,
+});

@@ -8,6 +8,12 @@ import { defineConfig } from "vite";
 import viteTsConfigPaths from "vite-tsconfig-paths";
 
 const config = defineConfig({
+	preview: {
+		allowedHosts: ["eventmakers-api.kokage.tech", "all"],
+	},
+	server: {
+		allowedHosts: ["eventmakers-api.kokage.tech", "all"],
+	},
 	resolve: {
 		alias: {
 			"@": fileURLToPath(new URL("./src", import.meta.url)),

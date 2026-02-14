@@ -19,6 +19,10 @@ RUN pnpm build
 
 EXPOSE 3000
 
+<<<<<<< HEAD
 CMD ["pnpm", "preview", "--port", "3000", "--host"]
+=======
+CMD ["node", ".output/server/index.mjs"]
+>>>>>>> group/main
 
 

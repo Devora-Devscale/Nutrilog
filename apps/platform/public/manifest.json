@@ -1,6 +1,11 @@
 {
+<<<<<<< HEAD
 	"short_name": "TanStack App",
 	"name": "Create TanStack App Sample",
+=======
+	"short_name": "Nutrilog",
+	"name": "Nutrilog by Devora Devscale",
+>>>>>>> group/main
 	"icons": [
 		{
 			"src": "favicon.ico",
