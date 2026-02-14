@@ -1,3 +1,4 @@
+import { getCookie } from "hono/cookie";
 import { createMiddleware } from "hono/factory";
 import { HTTPException } from "hono/http-exception";
 import { verify } from "hono/jwt";
@@ -6,18 +7,15 @@ import { env } from "../utils/env.js";
 import { prisma } from "../utils/prisma.js";
 
 export const authMiddleware = createMiddleware(async (c, next) => {
-	// get bearer token
-	const bearerToken = c.req.header("Authorization");
-	if (!bearerToken) {
+	// get jwt
+	const jwt = getCookie(c, "access_token");
+	if (!jwt) {
 		throw new HTTPException(401, { message: "Unauthorized" });
 	}
 
-	// split and get the jwt token
-	const token = bearerToken.split(" ")[1];
-
 	try {
 		// verify if the token is still valid
-		const verified = await verify(token, env().JWT_SECRET, "HS256");
+		const verified = await verify(jwt, env().JWT_SECRET, "HS256");
 
 		// casting to get the right payload interface because hono doesnt provide with correct jwtpayload structure
 		const payload = verified as unknown as JwtPayload;

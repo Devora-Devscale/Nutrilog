@@ -4,11 +4,17 @@ import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { authMiddleware } from "./middlewares/authMiddleware.js";
 import { authRoute } from "./modules/auth/route.js";
+import { profileRoute } from "./modules/profile/route.js";
 import type { HonoContext } from "./types.js";
 
 const app = new Hono<HonoContext>()
 	.use(logger())
-	.use(cors())
+	.use(
+		cors({
+			origin: "http://localhost:3000",
+			credentials: true,
+		}),
+	)
 
 	// unprotected route
 	.get("/", (c) => {
@@ -18,6 +24,7 @@ const app = new Hono<HonoContext>()
 
 	// protected route
 	.use(authMiddleware)
+	.route("/profile", profileRoute)
 	.get("/protected", async (c) => {
 		const user = c.get("user");
 		return c.json({ message: "protected route", user });

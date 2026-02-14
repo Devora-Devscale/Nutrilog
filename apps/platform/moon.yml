@@ -9,7 +9,7 @@ dependsOn:
 
 tasks:
   dev:
-    command: "pnpm run dev"
+    command: "pnpm dev"
     deps:
       - "api:dev"
   build:
