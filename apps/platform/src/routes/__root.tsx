@@ -6,14 +6,9 @@ import {
 	Scripts,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
-<<<<<<< HEAD
-import tanstackQueryConfig from "../integrations/tanstack-query/devtools";
-import appCss from "../styles.css?url";
-
-=======
-import { NotFound } from "@/components/not-found";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { NotFound } from "../components/not-found";
 import tanstackQueryConfig from "../integrations/tanstack-query/devtools";
 import appCss from "../styles.css?url";
 
@@ -23,7 +18,6 @@ declare module "@tanstack/react-router" {
 	}
 }
 
->>>>>>> group/main
 interface MyRouterContext {
 	queryClient: QueryClient;
 }
@@ -39,11 +33,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 				content: "width=device-width, initial-scale=1",
 			},
 			{
-<<<<<<< HEAD
-				title: "TanStack Start Starter",
-=======
 				title: "Nutrilog by Devora Devscale",
->>>>>>> group/main
 			},
 		],
 		links: [
@@ -55,10 +45,8 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 	}),
 
 	shellComponent: RootDocument,
-<<<<<<< HEAD
-=======
+
 	notFoundComponent: NotFound,
->>>>>>> group/main
 });
 
 function RootDocument({ children }: { children: React.ReactNode }) {
@@ -68,7 +56,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 				<HeadContent />
 			</head>
 			<body>
-<<<<<<< HEAD
 				{children}
 				<TanStackDevtools
 					config={{
@@ -83,7 +70,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 					]}
 				/>
 				<Scripts />
-=======
 				<TooltipProvider>
 					{children}
 					<TanStackDevtools
@@ -101,7 +87,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 					<Toaster position="top-center" />
 					<Scripts />
 				</TooltipProvider>
->>>>>>> group/main
 			</body>
 		</html>
 	);

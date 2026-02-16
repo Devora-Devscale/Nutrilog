@@ -1,11 +1,7 @@
 @import "tailwindcss";
-<<<<<<< HEAD
-=======
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-
 @custom-variant dark (&:is(.dark *));
->>>>>>> group/main
 
 body {
 	@apply m-0;
@@ -20,8 +16,6 @@ code {
 	font-family:
 		source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
-<<<<<<< HEAD
-=======
 
 @theme inline {
 	--radius-sm: calc(var(--radius) - 4px);
@@ -136,11 +130,8 @@ code {
 @layer base {
 	* {
 		@apply border-border outline-ring/50;
-		@apply border-border outline-ring/50;
 	}
 	body {
 		@apply bg-background text-foreground;
-		@apply bg-background text-foreground;
 	}
 }
->>>>>>> group/main

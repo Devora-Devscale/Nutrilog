@@ -9,10 +9,6 @@ export default defineConfig({
 		path: "prisma/migrations",
 	},
 	datasource: {
-<<<<<<< HEAD
-		url: "postgresql://postgres:postgres@127.0.0.1:5432/nutrilog?schema=public",
-=======
 		url: process.env.DATABASE_URL,
->>>>>>> group/main
 	},
 });

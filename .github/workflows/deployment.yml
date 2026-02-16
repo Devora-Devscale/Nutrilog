@@ -16,11 +16,8 @@ jobs:
       - uses: actions/checkout@v4
 
       - uses: pnpm/action-setup@v4
-<<<<<<< HEAD
         with:
           version: 10
-=======
->>>>>>> group/main
 
       - uses: actions/setup-node@v4
 
@@ -31,21 +28,16 @@ jobs:
         run: pnpm lint
 
   deploy:
-<<<<<<< HEAD
     if: github.event_name == 'push' && github.ref == 'ref/heads/main'
-=======
+
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
->>>>>>> group/main
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
       - uses: pnpm/action-setup@v4
-<<<<<<< HEAD
         with:
           version: 10
-=======
->>>>>>> group/main
 
       - uses: actions/setup-node@v4
 
@@ -64,11 +56,10 @@ jobs:
           script: |
             set -e
 
-<<<<<<< HEAD
+
             APP_DIR=/root/monorepo
-=======
+
             APP_DIR=/root/nutrilog
->>>>>>> group/main
             REPO_URL=${{ github.server_url }}/${{ github.repository }}.git
 
             echo "==> Create app directory if not exists"
@@ -92,8 +83,5 @@ jobs:
             echo "==> Docker compose up"
             docker compose -f docker-compose.yml down
             docker compose -f docker-compose.yml pull
-<<<<<<< HEAD
             docker compose -f docker-compose.yml up -d
-=======
             docker compose -f docker-compose.yml up --build -d
->>>>>>> group/main
