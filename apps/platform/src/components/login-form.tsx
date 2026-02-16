@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -58,7 +59,8 @@ export function LoginForm({
 									Login with Google
 								</Button>
 								<FieldDescription className="text-center">
-									Don&apos;t have an account? <a href="/">Sign up</a>
+									Don&apos;t have an account?{" "}
+									<Link to="/register">Sign up</Link>
 								</FieldDescription>
 							</Field>
 						</FieldGroup>

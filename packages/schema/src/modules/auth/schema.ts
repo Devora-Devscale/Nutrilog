@@ -17,3 +17,5 @@ export const registerFESchema = registerSchema
 		path: ["confirm_password"],
 		error: "Password and Confirm Password doesn't match",
 	});
+
+export type RegisterInput = z.infer<typeof registerSchema>;

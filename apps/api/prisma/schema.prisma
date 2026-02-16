@@ -13,3 +13,57 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model User {
+  id String @id @default(uuid())
+  email String @unique
+  password String
+  name String
+  school_id String?
+  created_at DateTime @default(now())
+  role Role?
+}
+
+enum Role {
+  KITCHEN_STAFF
+  WAREHOUSE_MANAGER
+  SCHOOL_ADMIN
+  VENDOR_MANAGER
+  AUDITOR
+}
+
+model Unit {
+  id        String   @id @default(uuid())
+  name      String?
+  created_at DateTime @default(now())
+  ingredients Ingredient[]
+}
+
+model Ingredient {
+  id        String   @id @default(uuid())
+  name      String
+  minimum   Int
+  stock   Int
+  unit_id String
+  created_at DateTime @default(now())
+  unit Unit @relation(fields: [unit_id], references: [id])
+  ingredientRecipes IngredientRecipe[]
+}
+
+model Recipe {
+  id        String   @id @default(uuid())
+  name      String
+  instruction String
+  created_at DateTime @default(now())
+  ingredientRecipes IngredientRecipe[]
+}
+
+model IngredientRecipe {
+  id                String @id @default(uuid())
+  ingredient_id     String
+  recipe_id         String
+  created_at        DateTime @default(now())
+  quantity          Int
+  ingredient Ingredient @relation(fields: [ingredient_id], references: [id])
+  recipe Recipe @relation(fields: [recipe_id], references: [id])
+}

@@ -7,12 +7,11 @@ ENV NODE_ENV=production
 RUN npm install -g pnpm
 
 COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml ./
+COPY packages/ packages/
 COPY apps/api/package.json apps/api/
-
 RUN pnpm install
-
 COPY ./ ./
-
+RUN pnpm --filter @nutrilog/schema build
 WORKDIR /app/apps/api
 RUN pnpm prisma generate
 

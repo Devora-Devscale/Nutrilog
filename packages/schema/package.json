@@ -1,16 +1,17 @@
 {
-	"name": "schema",
+	"name": "@nutrilog/schema",
 	"version": "1.0.0",
 	"description": "",
-	"main": "index.js",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"files": [
+		"dist"
+	],
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"build": "tsc --outDir dist"
 	},
-	"exports": {
-		".": {
-			"import": "./src/index.ts"
-		}
-	},
+	"type": "module",
+
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
