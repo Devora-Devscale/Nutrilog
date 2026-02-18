@@ -28,8 +28,6 @@ jobs:
         run: pnpm lint
 
   deploy:
-    if: github.event_name == 'push' && github.ref == 'ref/heads/main'
-
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
@@ -80,8 +78,6 @@ jobs:
             ${{ secrets.ENV_FILE }}
             EOF
 
-            echo "==> Docker compose up"
-            docker compose -f docker-compose.yml down
-            docker compose -f docker-compose.yml pull
-            docker compose -f docker-compose.yml up -d
-            docker compose -f docker-compose.yml up --build -d
+          echo "==> Docker compose up"
+          docker compose down
+          docker compose up -d --pull
