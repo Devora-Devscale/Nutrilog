@@ -6,9 +6,9 @@ import {
 	Scripts,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
-import { NotFound } from "@/components/not-found";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { NotFound } from "../components/not-found";
 import tanstackQueryConfig from "../integrations/tanstack-query/devtools";
 import appCss from "../styles.css?url";
 
@@ -45,6 +45,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 	}),
 
 	shellComponent: RootDocument,
+
 	notFoundComponent: NotFound,
 });
 
@@ -55,6 +56,20 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 				<HeadContent />
 			</head>
 			<body>
+				{children}
+				<TanStackDevtools
+					config={{
+						position: "bottom-right",
+					}}
+					plugins={[
+						{
+							name: "Tanstack Router",
+							render: <TanStackRouterDevtoolsPanel />,
+						},
+						tanstackQueryConfig,
+					]}
+				/>
+				<Scripts />
 				<TooltipProvider>
 					{children}
 					<TanStackDevtools
