@@ -1,4 +1,4 @@
-export type { RegisterInput } from "./modules/auth/schema.js";
+export type { LoginInput, RegisterInput } from "./modules/auth/schema.js";
 export {
 	loginSchema,
 	registerFESchema,
