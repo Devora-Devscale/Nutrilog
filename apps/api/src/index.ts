@@ -6,6 +6,7 @@ import { authRoute } from "./modules/auth/route.js";
 import { recipeRoute } from "./modules/recipe/route.js";
 import { schoolRoute } from "./modules/school/school.route.js";
 import { unitRoute } from "./modules/unit/route.js";
+import { userRoute } from "./modules/user/user.route.js";
 
 const app = new Hono()
 	.use(logger())
@@ -21,7 +22,8 @@ const app = new Hono()
 	.route("/auth", authRoute)
 	.route("/units", unitRoute)
 	.route("/recipes", recipeRoute)
-	.route("/schools", schoolRoute);
+	.route("/schools", schoolRoute)
+	.route("/users", userRoute);
 
 export type BackendType = typeof app;
 

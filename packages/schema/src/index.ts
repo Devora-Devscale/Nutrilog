@@ -25,3 +25,5 @@ export type {
 	UpdateUnitInput,
 } from "./modules/unit/schema.js";
 export { createUnitSchema, updateUnitSchema } from "./modules/unit/schema.js";
+export type { UpdateUserInput } from "./modules/user/user.js";
+export { updateUserSchema } from "./modules/user/user.js";
