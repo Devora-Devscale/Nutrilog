@@ -21,7 +21,7 @@ const app = new Hono()
 	.route("/auth", authRoute)
 	.route("/units", unitRoute)
 	.route("/recipes", recipeRoute)
-	.route("/school", schoolRoute);
+	.route("/schools", schoolRoute);
 
 export type BackendType = typeof app;
 

@@ -17,7 +17,7 @@ export const schoolService = {
 		});
 	},
 
-	update: async (id: string, data: { name: string; address: string }) => {
+	update: async (id: string, data: { name?: string; address?: string }) => {
 		return await prisma.school.update({
 			where: { id },
 			data,

@@ -1,13 +1,61 @@
+import { zValidator } from "@hono/zod-validator";
+import { createSchoolSchema, updateSchoolSchema } from "@nutrilog/schema";
 import { Hono } from "hono";
+import { HTTPException } from "hono/http-exception";
 import { schoolService } from "./school.service.js";
 
 export const schoolRoute = new Hono()
 	.get("/", async (c) => {
-		const data = await schoolService.getAll();
-		return c.json(data);
+		try {
+			const data = await schoolService.getAll();
+			return c.json({ success: true, data });
+		} catch (error) {
+			console.error(error);
+			throw new HTTPException(400, { message: "Failed to fetch schools" });
+		}
 	})
-	.post("/", async (c) => {
-		const body = await c.req.json();
-		const data = await schoolService.create(body);
-		return c.json(data);
+	.get("/:id", async (c) => {
+		const id = c.req.param("id");
+		try {
+			const data = await schoolService.getById(id);
+			if (!data) throw new HTTPException(404, { message: "School not found" });
+			return c.json({ success: true, data });
+		} catch (error) {
+			console.error(error);
+			throw new HTTPException(400, { message: "Failed to fetch school" });
+		}
+	})
+	.post("/", zValidator("json", createSchoolSchema), async (c) => {
+		const body = c.req.valid("json");
+		try {
+			const data = await schoolService.create(body);
+			return c.json({ success: true, data }, 201);
+		} catch (error) {
+			console.error(error);
+			throw new HTTPException(400, { message: "Failed to create school" });
+		}
+	})
+	.put("/:id", zValidator("json", updateSchoolSchema), async (c) => {
+		const id = c.req.param("id");
+		const body = c.req.valid("json");
+		try {
+			const data = await schoolService.update(id, body);
+			return c.json({ success: true, data });
+		} catch (error) {
+			console.error(error);
+			throw new HTTPException(400, { message: "Failed to update school" });
+		}
+	})
+	.delete("/:id", async (c) => {
+		const id = c.req.param("id");
+		try {
+			await schoolService.delete(id);
+			return c.json({
+				success: true,
+				data: { message: "School deleted successfully" },
+			});
+		} catch (error) {
+			console.error(error);
+			throw new HTTPException(400, { message: "Failed to delete school" });
+		}
 	});
