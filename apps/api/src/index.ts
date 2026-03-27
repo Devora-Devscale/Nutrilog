@@ -2,13 +2,16 @@ import { serve } from "@hono/node-server";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
+import { authMiddleware } from "./middlewares/authMiddleware.js";
 import { authRoute } from "./modules/auth/route.js";
+import { profileRoute } from "./modules/profile/route.js";
 import { recipeRoute } from "./modules/recipe/route.js";
 import { schoolRoute } from "./modules/school/school.route.js";
 import { unitRoute } from "./modules/unit/route.js";
 import { userRoute } from "./modules/user/user.route.js";
+import type { HonoContext } from "./types.js";
 
-const app = new Hono()
+const app = new Hono<HonoContext>()
 	.use(logger())
 	.use(
 		cors({
@@ -20,10 +23,13 @@ const app = new Hono()
 		return c.json({ message: "Devora - Nutrilog MBG" });
 	})
 	.route("/auth", authRoute)
+	.use(authMiddleware)
 	.route("/units", unitRoute)
 	.route("/recipes", recipeRoute)
 	.route("/schools", schoolRoute)
-	.route("/users", userRoute);
+	.route("/users", userRoute)
+	.route("/profile", profileRoute)
+	.route("/school", schoolRoute);
 
 export type BackendType = typeof app;
 
