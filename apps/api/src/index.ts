@@ -4,6 +4,7 @@ import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { authMiddleware } from "./middlewares/authMiddleware.js";
 import { authRoute } from "./modules/auth/route.js";
+import { ingredientTransactionRoute } from "./modules/ingredient-transaction/route.js";
 import { profileRoute } from "./modules/profile/route.js";
 import { recipeRoute } from "./modules/recipe/route.js";
 import { schoolRoute } from "./modules/school/route.js";
@@ -29,6 +30,7 @@ const app = new Hono<HonoContext>()
 	.route("/schools", schoolRoute)
 	.route("/users", userRoute)
 	.route("/profile", profileRoute)
+	.route("/ingredient-transactions", ingredientTransactionRoute)
 	.route("/school", schoolRoute);
 
 export type BackendType = typeof app;
