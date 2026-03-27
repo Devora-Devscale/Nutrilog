@@ -1,5 +1,8 @@
 {
-	"permissions": {
-		"allow": ["Bash(git restore:*)"]
-	}
+  "permissions": {
+    "allow": [
+      "Bash(git restore:*)",
+      "Bash(pnpm run:*)"
+    ]
+  }
 }

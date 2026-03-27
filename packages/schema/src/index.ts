@@ -19,10 +19,12 @@ export {
 export type {
 	CreateRecipeInput,
 	UpdateRecipeInput,
+	GenerateInstructionType,
 } from "./modules/recipe/schema.js";
 export {
 	createRecipeSchema,
 	updateRecipeSchema,
+	generateInstruction,
 } from "./modules/recipe/schema.js";
 export type {
 	CreateSchoolInput,
