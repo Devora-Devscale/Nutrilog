@@ -2,13 +2,20 @@
 	"compilerOptions": {
 		"target": "ESNext",
 		"module": "NodeNext",
-		"strict": true,
+		"moduleResolution": "nodenext",
 		"verbatimModuleSyntax": true,
 		"skipLibCheck": true,
+
 		"types": ["node"],
+		"outDir": "./dist",
+
+		"strict": true,
 		"jsx": "react-jsx",
 		"jsxImportSource": "hono/jsx",
-		"outDir": "./dist"
+
+		"sourceMap": true,
+		"declaration": true,
+		"declarationMap": true
 	},
-	"exclude": ["node_modules"]
+	"exclude": ["node_modules", "dist"]
 }

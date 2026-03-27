@@ -1,14 +1,15 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
 import {
-	BookOpen,
-	Bot,
+	Beef,
+	CookingPot,
 	GalleryVerticalEnd,
+	School,
 	Settings2,
-	SquareTerminal,
+	ShoppingBasket,
 } from "lucide-react";
 import type * as React from "react";
-
 import { NavMain } from "@/components/nav-main";
 import { NavUser } from "@/components/nav-user";
 import { TeamSwitcher } from "@/components/team-switcher";
@@ -19,6 +20,7 @@ import {
 	SidebarHeader,
 	SidebarRail,
 } from "@/components/ui/sidebar";
+import { api } from "@/utils/api";
 
 // This is sample data.
 const data = {
@@ -37,18 +39,23 @@ const data = {
 	navMain: [
 		{
 			title: "Meal Plan",
-			url: "/",
-			icon: SquareTerminal,
+			url: "/meal-plan",
+			icon: Beef,
 		},
 		{
 			title: "Recipe",
 			url: "/recipe",
-			icon: Bot,
+			icon: CookingPot,
 		},
 		{
 			title: "Ingredient",
 			url: "/ingredient",
-			icon: BookOpen,
+			icon: ShoppingBasket,
+		},
+		{
+			title: "School",
+			url: "/school",
+			icon: School,
 		},
 		{
 			title: "User Management",
@@ -57,8 +64,16 @@ const data = {
 		},
 	],
 };
-
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+	const { data: user } = useQuery({
+		queryKey: ["profile-me"],
+		queryFn: async () => {
+			const response = await api.profile.me.$get();
+			const data = await response.json();
+			return data.user;
+		},
+	});
+
 	return (
 		<Sidebar collapsible="icon" {...props}>
 			<SidebarHeader>
@@ -68,7 +83,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 				<NavMain items={data.navMain} />
 			</SidebarContent>
 			<SidebarFooter>
-				<NavUser user={data.user} />
+				{/** biome-ignore lint/style/noNonNullAssertion: i'll fix this later */}
+				<NavUser user={{ avatar: "", ...user! }} />
 			</SidebarFooter>
 			<SidebarRail />
 		</Sidebar>

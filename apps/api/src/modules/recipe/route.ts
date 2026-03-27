@@ -20,6 +20,7 @@ export const recipeRoute = new Hono()
 			throw new HTTPException(400, { message: "Failed to create recipe" });
 		}
 	})
+	.post("/instruction", zValidator("json"), async (_c) => {})
 	.get("/", async (c) => {
 		try {
 			const recipes = await getRecipes();
