@@ -7,7 +7,6 @@
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
-  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
@@ -20,6 +19,8 @@ model School {
   address    String
   created_at DateTime @default(now())
   users      User[]
+  meal_plans MealPlan[]
+
 }
 
 model User {
@@ -31,6 +32,12 @@ model User {
   created_at DateTime @default(now())
   role Role?
   school  School?  @relation(fields: [school_id], references: [id])
+
+  logs Log[]
+  // meal_plans MealPlan[] 
+  senders MealPlan[] @relation("senders")
+  receivers MealPlan[] @relation("receivers")
+
 }
 
 enum Role {
@@ -75,4 +82,41 @@ model IngredientRecipe {
   quantity          Int
   ingredient Ingredient @relation(fields: [ingredient_id], references: [id])
   recipe Recipe @relation(fields: [recipe_id], references: [id])
+}
+
+
+model Log {
+  id String @id @default(uuid())
+  new_data Json
+  old_data Json
+
+  user_id String
+  user User @relation(fields: [user_id], references: [id])
+}
+
+model MealPlan {
+  id String @id @default(uuid())
+  date DateTime
+  received_time DateTime
+  status Status
+  portion Int
+
+  receipt_photo String?
+  
+  created_at DateTime @default(now())
+  
+  school_id String
+  school School @relation(fields: [school_id], references: [id])
+ 
+  receiver_id String
+  receiver User @relation("receivers", fields: [receiver_id], references: [id])
+ 
+  sender_id String
+  sender User @relation("senders", fields: [sender_id], references: [id])
+}
+
+enum Status {
+  RECEIVED
+  SEND
+  PENDING
 }

@@ -1,5 +1,5 @@
+import { Link } from "@tanstack/react-router";
 import type { LucideIcon } from "lucide-react";
-
 import { Collapsible } from "@/components/ui/collapsible";
 import {
 	SidebarGroup,
@@ -35,10 +35,12 @@ export function NavMain({
 						className="group/collapsible"
 					>
 						<SidebarMenuItem>
-							<SidebarMenuButton tooltip={item.title}>
-								{item.icon && <item.icon />}
-								<span>{item.title}</span>
-							</SidebarMenuButton>
+							<Link to={item.url}>
+								<SidebarMenuButton tooltip={item.title}>
+									{item.icon && <item.icon />}
+									<span>{item.title}</span>
+								</SidebarMenuButton>
+							</Link>
 						</SidebarMenuItem>
 					</Collapsible>
 				))}

@@ -56,20 +56,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 				<HeadContent />
 			</head>
 			<body>
-				{children}
-				<TanStackDevtools
-					config={{
-						position: "bottom-right",
-					}}
-					plugins={[
-						{
-							name: "Tanstack Router",
-							render: <TanStackRouterDevtoolsPanel />,
-						},
-						tanstackQueryConfig,
-					]}
-				/>
-				<Scripts />
 				<TooltipProvider>
 					{children}
 					<TanStackDevtools

@@ -27,3 +27,9 @@ export const updateRecipeSchema = createRecipeSchema.extend({
 });
 
 export type UpdateRecipeInput = z.infer<typeof updateRecipeSchema>;
+
+export const generateInstruction = z.object({
+	name: z.string(),
+});
+
+export type GenerateInstructionType = z.infer<typeof generateInstruction>;

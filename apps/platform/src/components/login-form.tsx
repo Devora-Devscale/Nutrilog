@@ -10,16 +10,28 @@ import {
 import {
 	Field,
 	FieldDescription,
+	FieldError,
 	FieldGroup,
 	FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { useLoginForm, useLoginMutation } from "@/routes/login/-hook";
 
 export function LoginForm({
 	className,
 	...props
 }: React.ComponentProps<"div">) {
+	const {
+		register,
+		formState: { errors },
+		handleSubmit,
+	} = useLoginForm();
+	const { mutateAsync, isPending } = useLoginMutation();
+	const handleLogin = handleSubmit(async (data) => {
+		await mutateAsync(data);
+	});
+
 	return (
 		<div className={cn("flex flex-col gap-6", className)} {...props}>
 			<Card>
@@ -30,7 +42,7 @@ export function LoginForm({
 					</CardDescription>
 				</CardHeader>
 				<CardContent>
-					<form>
+					<form onSubmit={handleLogin}>
 						<FieldGroup>
 							<Field>
 								<FieldLabel htmlFor="email">Email</FieldLabel>
@@ -39,7 +51,11 @@ export function LoginForm({
 									type="email"
 									placeholder="m@example.com"
 									required
+									{...register("email")}
 								/>
+								{errors.email?.message && (
+									<FieldError>{errors.email?.message}</FieldError>
+								)}
 							</Field>
 							<Field>
 								<div className="flex items-center">
@@ -51,10 +67,20 @@ export function LoginForm({
 										Forgot your password?
 									</a>
 								</div>
-								<Input id="password" type="password" required />
+								<Input
+									id="password"
+									type="password"
+									required
+									{...register("password")}
+								/>
+								{errors.password?.message && (
+									<FieldError>{errors.password?.message}</FieldError>
+								)}
 							</Field>
 							<Field>
-								<Button type="submit">Login</Button>
+								<Button disabled={isPending} type="submit">
+									{isPending ? "Logging in..." : "Login"}
+								</Button>
 								<Button disabled variant="outline" type="button">
 									Login with Google
 								</Button>
