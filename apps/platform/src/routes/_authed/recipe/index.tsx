@@ -10,7 +10,6 @@ import {
 	DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import {
 	Table,
 	TableBody,
@@ -19,13 +18,14 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import { Textarea } from "@/components/ui/textarea";
+import { useGetIngredients } from "@/modules/ingredient/hooks/useIngredient";
 import {
 	useCreateRecipe,
 	useDeleteRecipe,
 	useGetRecipes,
 	useUpdateRecipe,
 } from "@/modules/recipe/hooks/useRecipe";
-import { useGetIngredients } from "@/modules/ingredient/hooks/useIngredient";
 
 export const Route = createFileRoute("/_authed/recipe/")({
 	component: RecipePage,
@@ -51,6 +51,7 @@ type Recipe = {
 };
 
 type IngredientInput = {
+	id: string;
 	ingredient_id: string;
 	quantity: string;
 };
@@ -114,25 +115,31 @@ function RecipePage() {
 	const addIngredientRow = () => {
 		setForm({
 			...form,
-			ingredients: [...form.ingredients, { ingredient_id: "", quantity: "" }],
+			ingredients: [
+				...form.ingredients,
+				{ id: crypto.randomUUID(), ingredient_id: "", quantity: "" },
+			],
 		});
 	};
 
-	const removeIngredientRow = (index: number) => {
+	const removeIngredientRow = (id: string) => {
 		setForm({
 			...form,
-			ingredients: form.ingredients.filter((_, i) => i !== index),
+			ingredients: form.ingredients.filter((ing) => ing.id !== id),
 		});
 	};
 
 	const updateIngredientRow = (
-		index: number,
+		id: string,
 		field: keyof IngredientInput,
 		value: string,
 	) => {
-		const newIngredients = [...form.ingredients];
-		newIngredients[index][field] = value;
-		setForm({ ...form, ingredients: newIngredients });
+		setForm({
+			...form,
+			ingredients: form.ingredients.map((ing) =>
+				ing.id === id ? { ...ing, [field]: value } : ing,
+			),
+		});
 	};
 
 	const openEditDialog = (recipe: Recipe) => {
@@ -142,6 +149,7 @@ function RecipePage() {
 			instruction: recipe.instruction,
 			ingredients:
 				recipe.ingredientRecipes?.map((ir) => ({
+					id: crypto.randomUUID(),
 					ingredient_id: ir.ingredient?.id || "",
 					quantity: String(ir.quantity),
 				})) || [],
@@ -151,7 +159,7 @@ function RecipePage() {
 
 	const truncateText = (text: string, maxLength: number) => {
 		if (text.length <= maxLength) return text;
-		return text.slice(0, maxLength) + "...";
+		return `${text.slice(0, maxLength)}...`;
 	};
 
 	const RecipeForm = ({
@@ -178,16 +186,23 @@ function RecipePage() {
 			<div className="flex flex-col gap-2">
 				<div className="flex items-center justify-between">
 					<span className="text-sm font-medium">Ingredients</span>
-					<Button type="button" size="sm" variant="outline" onClick={addIngredientRow}>
+					<Button
+						type="button"
+						size="sm"
+						variant="outline"
+						onClick={addIngredientRow}
+					>
 						+ Add
 					</Button>
 				</div>
-				{form.ingredients.map((ing, index) => (
-					<div key={index} className="flex gap-2">
+				{form.ingredients.map((ing) => (
+					<div key={ing.id} className="flex gap-2">
 						<select
 							className="flex-1 rounded-md border border-input bg-background px-3 py-2 text-sm"
 							value={ing.ingredient_id}
-							onChange={(e) => updateIngredientRow(index, "ingredient_id", e.target.value)}
+							onChange={(e) =>
+								updateIngredientRow(ing.id, "ingredient_id", e.target.value)
+							}
 						>
 							<option value="">Select Ingredient</option>
 							{ingredients.map((ingredient) => (
@@ -200,14 +215,16 @@ function RecipePage() {
 							type="number"
 							placeholder="Qty"
 							value={ing.quantity}
-							onChange={(e) => updateIngredientRow(index, "quantity", e.target.value)}
+							onChange={(e) =>
+								updateIngredientRow(ing.id, "quantity", e.target.value)
+							}
 							className="w-24"
 						/>
 						<Button
 							type="button"
 							size="sm"
 							variant="destructive"
-							onClick={() => removeIngredientRow(index)}
+							onClick={() => removeIngredientRow(ing.id)}
 						>
 							&times;
 						</Button>
