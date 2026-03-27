@@ -18,10 +18,12 @@ export {
 } from "./modules/ingredient-transaction/schema.js";
 export type {
 	CreateRecipeInput,
+	GenerateInstructionType,
 	UpdateRecipeInput,
 } from "./modules/recipe/schema.js";
 export {
 	createRecipeSchema,
+	generateInstruction,
 	updateRecipeSchema,
 } from "./modules/recipe/schema.js";
 export type {

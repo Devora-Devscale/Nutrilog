@@ -1,4 +1,4 @@
-import type { Role } from "../../generated/prisma/index.js";
+import type { Role } from "../../generated/prisma/enums.js";
 import { prisma } from "../../utils/prisma.js";
 
 export const userService = {

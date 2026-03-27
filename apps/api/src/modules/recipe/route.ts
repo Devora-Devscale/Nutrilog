@@ -1,5 +1,9 @@
 import { zValidator } from "@hono/zod-validator";
-import { createRecipeSchema, updateRecipeSchema } from "@nutrilog/schema";
+import {
+	createRecipeSchema,
+	generateInstruction,
+	updateRecipeSchema,
+} from "@nutrilog/schema";
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
 import {
@@ -20,7 +24,10 @@ export const recipeRoute = new Hono()
 			throw new HTTPException(400, { message: "Failed to create recipe" });
 		}
 	})
-	.post("/instruction", zValidator("json"), async (_c) => {})
+	.post("/instruction", zValidator("json", generateInstruction), async (_c) => {
+		// TODO: Implement AI instruction generation
+		return _c.json({ success: true, data: { instruction: "" } });
+	})
 	.get("/", async (c) => {
 		try {
 			const recipes = await getRecipes();
