@@ -25,6 +25,7 @@ const app = new Hono<HonoContext>()
 	.use(authMiddleware)
 	.route("/units", unitRoute)
 	.route("/recipes", recipeRoute)
+	.route("/schools", schoolRoute)
 	.route("/profile", profileRoute)
 	.route("/school", schoolRoute);
 

@@ -14,6 +14,14 @@ datasource db {
   provider = "postgresql"
 }
 
+model School {
+  id         String   @id @default(uuid())
+  name       String
+  address    String
+  created_at DateTime @default(now())
+  users      User[]
+}
+
 model User {
   id String @id @default(uuid())
   email String @unique
@@ -22,6 +30,7 @@ model User {
   school_id String?
   created_at DateTime @default(now())
   role Role?
+  school  School?  @relation(fields: [school_id], references: [id])
 }
 
 enum Role {
