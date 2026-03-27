@@ -8,6 +8,7 @@ import { profileRoute } from "./modules/profile/route.js";
 import { recipeRoute } from "./modules/recipe/route.js";
 import { schoolRoute } from "./modules/school/school.route.js";
 import { unitRoute } from "./modules/unit/route.js";
+import { userRoute } from "./modules/user/user.route.js";
 import type { HonoContext } from "./types.js";
 
 const app = new Hono<HonoContext>()
@@ -26,6 +27,7 @@ const app = new Hono<HonoContext>()
 	.route("/units", unitRoute)
 	.route("/recipes", recipeRoute)
 	.route("/schools", schoolRoute)
+	.route("/users", userRoute)
 	.route("/profile", profileRoute)
 	.route("/school", schoolRoute);
 
