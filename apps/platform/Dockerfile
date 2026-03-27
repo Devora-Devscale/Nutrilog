@@ -16,6 +16,7 @@ RUN pnpm install
 
 COPY . .
 RUN pnpm --filter @nutrilog/schema build
+RUN pnpm db:generate
 RUN pnpm --filter @nutrilog/api build
 WORKDIR /app/apps/platform
 RUN pnpm build
