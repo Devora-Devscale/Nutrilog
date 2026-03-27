@@ -1,4 +1,4 @@
-export type { RegisterInput } from "./modules/auth/schema.js";
+export type { LoginInput, RegisterInput } from "./modules/auth/schema.js";
 export {
 	loginSchema,
 	registerFESchema,
@@ -12,6 +12,14 @@ export {
 	createRecipeSchema,
 	updateRecipeSchema,
 } from "./modules/recipe/schema.js";
+export type {
+	CreateSchoolInput,
+	UpdateSchoolInput,
+} from "./modules/school/school.js";
+export {
+	createSchoolSchema,
+	updateSchoolSchema,
+} from "./modules/school/school.js";
 export type {
 	CreateUnitInput,
 	UpdateUnitInput,
