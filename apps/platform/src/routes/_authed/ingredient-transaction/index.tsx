@@ -25,7 +25,7 @@ import {
 	useUpdateIngredientTransaction,
 } from "@/modules/ingredient-transaction/hooks/useIngredientTransaction";
 
-export const Route = createFileRoute("/_authed/ingredient-transaction")({
+export const Route = createFileRoute("/_authed/ingredient-transaction/")({
 	component: IngredientTransactionPage,
 	staticData: {
 		crumb: {
