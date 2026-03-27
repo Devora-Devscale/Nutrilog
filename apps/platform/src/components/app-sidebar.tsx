@@ -3,8 +3,10 @@
 import { useQuery } from "@tanstack/react-query";
 import {
 	Beef,
+	Boxes,
 	CookingPot,
 	GalleryVerticalEnd,
+	LayoutDashboard,
 	School,
 	Settings2,
 	ShoppingBasket,
@@ -38,6 +40,11 @@ const data = {
 	],
 	navMain: [
 		{
+			title: "Dashboard",
+			url: "/",
+			icon: LayoutDashboard,
+		},
+		{
 			title: "Meal Plan",
 			url: "/meal-plan",
 			icon: Beef,
@@ -53,13 +60,18 @@ const data = {
 			icon: ShoppingBasket,
 		},
 		{
+			title: "Unit",
+			url: "/unit",
+			icon: Boxes,
+		},
+		{
 			title: "School",
 			url: "/school",
 			icon: School,
 		},
 		{
 			title: "User Management",
-			url: "/user-management",
+			url: "/user",
 			icon: Settings2,
 		},
 	],

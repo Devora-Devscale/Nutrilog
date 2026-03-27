@@ -7,7 +7,8 @@ export const createUnitSchema = z.object({
 export type CreateUnitInput = z.infer<typeof createUnitSchema>;
 
 export const updateUnitSchema = createUnitSchema.extend({
-	name: z.string().optional(),
+	id: z.uuid(),
+	name: z.string(),
 });
 
 export type UpdateUnitInput = z.infer<typeof updateUnitSchema>;

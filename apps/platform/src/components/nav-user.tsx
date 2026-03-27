@@ -1,5 +1,7 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { ChevronsUpDown, LogOut } from "lucide-react";
+import type React from "react";
+import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
 	DropdownMenu,
@@ -15,6 +17,7 @@ import {
 	SidebarMenuItem,
 	useSidebar,
 } from "@/components/ui/sidebar";
+import { api } from "@/utils/api";
 
 export function NavUser({
 	user,
@@ -26,7 +29,19 @@ export function NavUser({
 	};
 }) {
 	const { isMobile } = useSidebar();
-
+	const navigate = useNavigate();
+	const handleLogout = async (e: React.MouseEvent) => {
+		e.preventDefault();
+		const response = await api.auth.logout.$post();
+		if (response.ok) {
+			toast.success("Logout successfully");
+			setTimeout(() => {
+				navigate({ to: "/login" });
+			}, 500);
+			return;
+		}
+		toast.error("Something happened..");
+	};
 	return (
 		<SidebarMenu>
 			<SidebarMenuItem>
@@ -68,7 +83,7 @@ export function NavUser({
 							</Link>
 						</DropdownMenuLabel>
 						<DropdownMenuSeparator />
-						<DropdownMenuItem>
+						<DropdownMenuItem onClick={handleLogout}>
 							<LogOut />
 							Log out
 						</DropdownMenuItem>

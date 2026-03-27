@@ -5,6 +5,14 @@ export {
 	registerSchema,
 } from "./modules/auth/schema.js";
 export type {
+	CreateIngredientInput,
+	UpdateIngredientInput,
+} from "./modules/ingredient/schema.js";
+export {
+	createIngredientSchema,
+	updateIngredientSchema,
+} from "./modules/ingredient/schema.js";
+export type {
 	CreateRecipeInput,
 	UpdateRecipeInput,
 } from "./modules/recipe/schema.js";
