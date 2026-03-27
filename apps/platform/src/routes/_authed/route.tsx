@@ -34,9 +34,12 @@ function RouteComponent() {
 			crumb: match.staticData.crumb,
 		}));
 
-	const path = breadCrumbs[0].crumb?.module_path
-		? breadCrumbs[0].crumb?.module_path
-		: breadCrumbs[0].path.replace(/\/$/, "") || "/";
+	const path =
+		breadCrumbs.length > 0 && breadCrumbs[0].crumb?.module_path
+			? breadCrumbs[0].crumb?.module_path
+			: breadCrumbs.length > 0
+				? breadCrumbs[0].path.replace(/\/$/, "") || "/"
+				: "/";
 
 	return (
 		<SidebarProvider>
@@ -51,14 +54,16 @@ function RouteComponent() {
 						/>
 						<Breadcrumb>
 							<BreadcrumbList>
-								<BreadcrumbItem className="hidden md:block">
-									<Link
-										to={path}
-										className=" hover:text-foreground transition-colors"
-									>
-										{breadCrumbs[0].crumb?.module}
-									</Link>
-								</BreadcrumbItem>
+								{breadCrumbs.length > 0 && (
+									<BreadcrumbItem className="hidden md:block">
+										<Link
+											to={path}
+											className=" hover:text-foreground transition-colors"
+										>
+											{breadCrumbs[0].crumb?.module}
+										</Link>
+									</BreadcrumbItem>
+								)}
 								{breadCrumbs.map((crumb, index) => {
 									// Cek apakah ini item terakhir (Halaman Aktif)
 									const isLast = index === breadCrumbs.length - 1;

@@ -25,7 +25,7 @@ import {
 	useUpdateIngredientTransaction,
 } from "@/modules/ingredient-transaction/hooks/useIngredientTransaction";
 
-export const Route = createFileRoute("/_authed/ingredient-transaction")({
+export const Route = createFileRoute("/_authed/ingredient-transaction/")({
 	component: IngredientTransactionPage,
 	staticData: {
 		crumb: {
@@ -70,8 +70,8 @@ function IngredientTransactionPage() {
 				setForm(defaultForm);
 			},
 			onError: () => toast.error("Failed to create transaction"),
-		});
-	};
+		})
+	}
 
 	const handleUpdate = () => {
 		if (!selected) return;
@@ -85,16 +85,16 @@ function IngredientTransactionPage() {
 				},
 				onError: () => toast.error("Failed to update transaction"),
 			},
-		);
-	};
+		)
+	}
 
 	const handleDelete = (id: string) => {
 		if (!confirm("Are you sure you want to delete this transaction?")) return;
 		deleteTransaction.mutate(id, {
 			onSuccess: () => toast.success("Transaction deleted!"),
 			onError: () => toast.error("Failed to delete transaction"),
-		});
-	};
+		})
+	}
 
 	return (
 		<div className="flex flex-col gap-4">
@@ -175,8 +175,8 @@ function IngredientTransactionPage() {
 									<Dialog
 										open={openEdit && selected?.id === transaction.id}
 										onOpenChange={(open) => {
-											setOpenEdit(open);
-											if (!open) setSelected(null);
+											setOpenEdit(open)
+											if (!open) setSelected(null)
 										}}
 									>
 										<DialogTrigger asChild>
@@ -184,14 +184,14 @@ function IngredientTransactionPage() {
 												variant="outline"
 												size="sm"
 												onClick={() => {
-													setSelected(transaction);
+													setSelected(transaction)
 													setForm({
 														out: transaction.out,
 														in: transaction.in,
 														current_stock: transaction.current_stock,
 														ingredient_id: transaction.ingredient_id,
-													});
-													setOpenEdit(true);
+													})
+													setOpenEdit(true)
 												}}
 											>
 												Edit
@@ -262,5 +262,5 @@ function IngredientTransactionPage() {
 				</Table>
 			)}
 		</div>
-	);
+	)
 }

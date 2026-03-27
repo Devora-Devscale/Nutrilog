@@ -25,7 +25,7 @@ import {
 	useUpdateIngredient,
 } from "@/modules/ingredient/hooks/useIngredient";
 
-export const Route = createFileRoute("/_authed/ingredient")({
+export const Route = createFileRoute("/_authed/ingredient/")({
 	component: IngredientPage,
 	staticData: {
 		crumb: {
@@ -69,8 +69,8 @@ function IngredientPage() {
 				setForm(defaultForm);
 			},
 			onError: () => toast.error("Failed to create ingredient"),
-		});
-	};
+		})
+	}
 
 	const handleUpdate = () => {
 		if (!selectedIngredient) return;
@@ -84,16 +84,16 @@ function IngredientPage() {
 				},
 				onError: () => toast.error("Failed to update ingredient"),
 			},
-		);
-	};
+		)
+	}
 
 	const handleDelete = (id: string) => {
 		if (!confirm("Are you sure you want to delete this ingredient?")) return;
 		deleteIngredient.mutate(id, {
 			onSuccess: () => toast.success("Ingredient deleted!"),
 			onError: () => toast.error("Failed to delete ingredient"),
-		});
-	};
+		})
+	}
 
 	return (
 		<div className="flex flex-col gap-4">
@@ -169,7 +169,7 @@ function IngredientPage() {
 									<Dialog
 										open={openEdit && selectedIngredient?.id === ingredient.id}
 										onOpenChange={(open) => {
-											setOpenEdit(open);
+											setOpenEdit(open)
 											if (!open) setSelectedIngredient(null);
 										}}
 									>
@@ -178,14 +178,14 @@ function IngredientPage() {
 												variant="outline"
 												size="sm"
 												onClick={() => {
-													setSelectedIngredient(ingredient);
+													setSelectedIngredient(ingredient)
 													setForm({
 														name: ingredient.name,
 														minimum: ingredient.minimum,
 														stock: ingredient.stock,
 														unit_id: ingredient.unit_id,
-													});
-													setOpenEdit(true);
+													})
+													setOpenEdit(true)
 												}}
 											>
 												Edit
@@ -255,5 +255,5 @@ function IngredientPage() {
 				</Table>
 			)}
 		</div>
-	);
+	)
 }
