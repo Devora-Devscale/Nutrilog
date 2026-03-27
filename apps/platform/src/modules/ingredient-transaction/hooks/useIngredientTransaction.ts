@@ -60,7 +60,9 @@ export const useDeleteIngredientTransaction = () => {
 	const queryClient = useQueryClient();
 	return useMutation({
 		mutationFn: async (id: string) => {
-			const res = await api.ingredientTransactions[":id"].$delete({ param: { id } });
+			const res = await api.ingredientTransactions[":id"].$delete({
+				param: { id },
+			});
 			return await res.json();
 		},
 		onSuccess: () => {

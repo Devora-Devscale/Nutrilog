@@ -115,9 +115,7 @@ function IngredientPage() {
 				type="number"
 				placeholder="Minimum stock"
 				value={form.minimum}
-				onChange={(e) =>
-					setForm({ ...form, minimum: Number(e.target.value) })
-				}
+				onChange={(e) => setForm({ ...form, minimum: Number(e.target.value) })}
 			/>
 			<Input
 				type="number"
@@ -188,7 +186,9 @@ function IngredientPage() {
 									<TableCell>{unit?.name || ingredient.unit_id}</TableCell>
 									<TableCell className="flex gap-2">
 										<Dialog
-											open={openEdit && selectedIngredient?.id === ingredient.id}
+											open={
+												openEdit && selectedIngredient?.id === ingredient.id
+											}
 											onOpenChange={(open) => {
 												setOpenEdit(open);
 												if (!open) setSelectedIngredient(null);

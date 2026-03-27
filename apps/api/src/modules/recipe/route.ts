@@ -1,5 +1,9 @@
 import { zValidator } from "@hono/zod-validator";
-import { createRecipeSchema, updateRecipeSchema, generateInstruction } from "@nutrilog/schema";
+import {
+	createRecipeSchema,
+	generateInstruction,
+	updateRecipeSchema,
+} from "@nutrilog/schema";
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
 import {
