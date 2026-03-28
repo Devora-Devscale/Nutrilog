@@ -28,7 +28,7 @@ import {
 	useDeleteUser,
 	useGetUsers,
 	useUpdateUser,
-} from "@/modules/user/hooks/useUser";
+} from "@/modules/user/useUser";
 
 const ROLES = [
 	"KITCHEN_STAFF",

@@ -1,3 +1,4 @@
+import type { Role } from "@nutrilog/api/dist/src/generated/prisma/enums";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/utils/api";
 
@@ -19,7 +20,7 @@ export const useUpdateUser = () => {
 			data,
 		}: {
 			id: string;
-			data: { name?: string; role?: string; school_id?: string };
+			data: { name?: string; role?: Role; school_id?: string };
 		}) => {
 			const res = await api.users[":id"].$put({ param: { id }, json: data });
 			return await res.json();

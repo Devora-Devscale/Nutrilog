@@ -18,12 +18,13 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import { Textarea } from "@/components/ui/textarea";
 import {
 	useCreateSchool,
 	useDeleteSchool,
 	useGetSchools,
 	useUpdateSchool,
-} from "@/modules/school/hooks/useSchool";
+} from "@/modules/school/useSchool";
 
 export const Route = createFileRoute("/_authed/school/")({
 	component: SchoolPage,
@@ -33,7 +34,7 @@ export const Route = createFileRoute("/_authed/school/")({
 });
 
 function SchoolPage() {
-	const { data, isLoading } = useGetSchools();
+	const { data: schools = [], isLoading } = useGetSchools();
 	const createSchool = useCreateSchool();
 	const updateSchool = useUpdateSchool();
 	const deleteSchool = useDeleteSchool();
@@ -46,10 +47,6 @@ function SchoolPage() {
 		address: string;
 	} | null>(null);
 	const [form, setForm] = useState({ name: "", address: "" });
-
-	const schools =
-		(data as { data: { id: string; name: string; address: string }[] })?.data ??
-		[];
 
 	const handleCreate = () => {
 		createSchool.mutate(form, {
@@ -103,7 +100,7 @@ function SchoolPage() {
 								value={form.name}
 								onChange={(e) => setForm({ ...form, name: e.target.value })}
 							/>
-							<Input
+							<Textarea
 								placeholder="Address"
 								value={form.address}
 								onChange={(e) => setForm({ ...form, address: e.target.value })}

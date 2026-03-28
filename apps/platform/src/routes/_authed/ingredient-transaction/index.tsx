@@ -29,9 +29,7 @@ export const Route = createFileRoute("/_authed/ingredient-transaction/")({
 	component: IngredientTransactionPage,
 	staticData: {
 		crumb: {
-			module: "Ingredient Transaction",
-			action: "List",
-			module_path: "/_authed/ingredient-transaction",
+			module: "Stocks",
 		},
 	},
 });
@@ -91,7 +89,7 @@ function IngredientTransactionPage() {
 	const handleDelete = (id: string) => {
 		if (!confirm("Are you sure you want to delete this transaction?")) return;
 		deleteTransaction.mutate(id, {
-			onSuccess: () => toast.success("Transaction deleted!"),
+			onSuccess: () => toast.success("Stock deleted!"),
 			onError: () => toast.error("Failed to delete transaction"),
 		});
 	};
@@ -99,10 +97,10 @@ function IngredientTransactionPage() {
 	return (
 		<div className="flex flex-col gap-4">
 			<div className="flex items-center justify-between">
-				<h1 className="text-2xl font-bold">Ingredient Transactions</h1>
+				<h1 className="text-2xl font-bold">Stock</h1>
 				<Dialog open={openCreate} onOpenChange={setOpenCreate}>
 					<DialogTrigger asChild>
-						<Button>Add Transaction</Button>
+						<Button>Add Stock</Button>
 					</DialogTrigger>
 					<DialogContent>
 						<DialogHeader>

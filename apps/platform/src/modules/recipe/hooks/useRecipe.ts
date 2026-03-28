@@ -6,7 +6,8 @@ export const useGetRecipes = () => {
 		queryKey: ["recipes"],
 		queryFn: async () => {
 			const res = await api.recipes.$get();
-			return await res.json();
+			const data = await res.json();
+			return data.data;
 		},
 	});
 };

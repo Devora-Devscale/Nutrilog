@@ -7,8 +7,8 @@ import { schoolService } from "./school.service.js";
 export const schoolRoute = new Hono()
 	.get("/", async (c) => {
 		try {
-			const data = await schoolService.getAll();
-			return c.json({ success: true, data });
+			const schools = await schoolService.getAll();
+			return c.json({ schools });
 		} catch (error) {
 			console.error(error);
 			throw new HTTPException(400, { message: "Failed to fetch schools" });

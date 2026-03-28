@@ -5,11 +5,12 @@ import { redirect } from "@tanstack/react-router";
 import {
 	Beef,
 	Boxes,
-	CookingPot,
+	Carrot,
+	ContactRound,
 	GalleryVerticalEnd,
 	LayoutDashboard,
+	Salad,
 	School,
-	Settings2,
 	ShoppingBasket,
 } from "lucide-react";
 import type * as React from "react";
@@ -54,12 +55,17 @@ const data = {
 		{
 			title: "Recipe",
 			url: "/recipe",
-			icon: CookingPot,
+			icon: Salad,
+		},
+		{
+			title: "Stocks",
+			url: "/ingredient-transaction",
+			icon: ShoppingBasket,
 		},
 		{
 			title: "Ingredient",
 			url: "/ingredient",
-			icon: ShoppingBasket,
+			icon: Carrot,
 		},
 		{
 			title: "Unit",
@@ -74,7 +80,7 @@ const data = {
 		{
 			title: "User Management",
 			url: "/user",
-			icon: Settings2,
+			icon: ContactRound,
 		},
 	],
 };
@@ -86,7 +92,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 				const response = await api.profile.me.$get();
 				const data = await response.json();
 				return data.user;
-			} catch (error) {
+			} catch (_error) {
 				toast.error("Authentication failed. Redirecting..");
 				throw redirect({ to: "/login" });
 			}

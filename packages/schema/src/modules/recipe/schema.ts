@@ -14,6 +14,7 @@ export const createRecipeSchema = z.object({
 export type CreateRecipeInput = z.infer<typeof createRecipeSchema>;
 
 export const updateRecipeSchema = createRecipeSchema.extend({
+	id: z.uuid(),
 	name: z.string().optional(),
 	instruction: z.string().optional(),
 	ingredients: z

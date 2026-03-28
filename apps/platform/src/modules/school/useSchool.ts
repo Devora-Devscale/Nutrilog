@@ -6,7 +6,8 @@ export const useGetSchools = () => {
 		queryKey: ["schools"],
 		queryFn: async () => {
 			const res = await api.schools.$get();
-			return await res.json();
+			const data = await res.json();
+			return data.schools;
 		},
 	});
 };

@@ -1,3 +1,4 @@
+import type { UpdateIngredientInput } from "@nutrilog/schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/utils/api";
 
@@ -37,12 +38,7 @@ export const useUpdateIngredient = () => {
 			data,
 		}: {
 			id: string;
-			data: {
-				name?: string;
-				minimum?: number;
-				stock?: number;
-				unit_id?: string;
-			};
+			data: UpdateIngredientInput;
 		}) => {
 			const res = await api.ingredients[":id"].$patch({
 				param: { id },
