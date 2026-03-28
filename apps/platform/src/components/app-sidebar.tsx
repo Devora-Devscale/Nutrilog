@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { redirect } from "@tanstack/react-router";
 import {
 	Beef,
 	Boxes,
@@ -12,6 +13,7 @@ import {
 	ShoppingBasket,
 } from "lucide-react";
 import type * as React from "react";
+import { toast } from "sonner";
 import { NavMain } from "@/components/nav-main";
 import { NavUser } from "@/components/nav-user";
 import { TeamSwitcher } from "@/components/team-switcher";
@@ -80,10 +82,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 	const { data: user } = useQuery({
 		queryKey: ["profile-me"],
 		queryFn: async () => {
-			const response = await api.profile.me.$get();
-			const data = await response.json();
-			return data.user;
+			try {
+				const response = await api.profile.me.$get();
+				const data = await response.json();
+				return data.user;
+			} catch (error) {
+				toast.error("Authentication failed. Redirecting..");
+				throw redirect({ to: "/login" });
+			}
 		},
+		retry: false,
 	});
 
 	return (

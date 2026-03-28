@@ -51,3 +51,7 @@ lerna-debug.log*
 
 # Keep environment variables out of version control
 generated
+
+# moon
+.moon/cache
+.moon/docker
