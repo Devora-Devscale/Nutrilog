@@ -69,7 +69,6 @@ function SchoolPage() {
 								<TableCell className="flex gap-2">
 									<UpdateSchoolDialog data={school} />
 									<DeleteSchoolDialog data={school} />
-
 								</TableCell>
 							</TableRow>
 						))}
@@ -193,11 +192,11 @@ const DeleteSchoolDialog = ({ data }: { data: UpdateSchoolInput }) => {
 
 	const { mutateAsync, isPending } = useDeleteSchool(data.id);
 
-	const handleDelete = (async () => {
+	const handleDelete = async () => {
 		await mutateAsync();
 		setOpenDelete(false);
-	});
-	
+	};
+
 	return (
 		<Dialog open={openDelete} onOpenChange={setOpenDelete}>
 			<DialogTrigger asChild>
@@ -210,7 +209,11 @@ const DeleteSchoolDialog = ({ data }: { data: UpdateSchoolInput }) => {
 					<DialogTitle>Delete School</DialogTitle>
 				</DialogHeader>
 				Do you want to delete {data.name}?
-				<Button variant={"destructive"} onClick={handleDelete} disabled={isPending}>
+				<Button
+					variant={"destructive"}
+					onClick={handleDelete}
+					disabled={isPending}
+				>
 					{isPending ? "Deleting..." : "Delete"}
 				</Button>
 			</DialogContent>

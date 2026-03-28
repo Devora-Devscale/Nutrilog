@@ -172,7 +172,7 @@ function RouteComponent() {
 			const mealPlans = data.schools
 				.filter((s) => s.portion > 0)
 				.map((school) => ({
-					date: new Date(data.date + "T00:00:00.000Z"),
+					date: new Date(`${data.date}T00:00:00.000Z`),
 					received_time: new Date(data.received_time).toISOString(),
 					status: "PENDING" as const,
 					portion: Number(school.portion),

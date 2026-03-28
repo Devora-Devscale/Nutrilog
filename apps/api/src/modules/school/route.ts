@@ -50,7 +50,7 @@ export const schoolRoute = new Hono()
 	})
 	.delete(
 		"/:id",
-		zValidator("param", z.object({ id: z.uuid()})),
+		zValidator("param", z.object({ id: z.uuid() })),
 		async (c) => {
 			const { id } = c.req.valid("param");
 			await prisma.school.delete({
