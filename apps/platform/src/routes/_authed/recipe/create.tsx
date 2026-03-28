@@ -74,8 +74,8 @@ function RouteComponent() {
 			const response = await api.recipes.instruction.$post({ json: { name } });
 
 			if (!response.ok) {
-				const error = await response.json();
-				throw new Error(error.message || "Gagal generate instruksi");
+				// const error = await response.json();
+				throw new Error("Gagal generate instruksi");
 			}
 
 			const result = await response.json();
@@ -152,7 +152,7 @@ function RouteComponent() {
 							{...register("instruction")}
 							placeholder="Instruksi memasak akan muncul di sini setelah di-generate oleh AI"
 							rows={10}
-							className="min-h-[200px]"
+							className="min-h-50"
 						/>
 						{errors.instruction?.message && (
 							<FieldError>{errors.instruction?.message}</FieldError>

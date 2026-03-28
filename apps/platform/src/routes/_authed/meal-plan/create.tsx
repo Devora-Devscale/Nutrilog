@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -110,18 +110,26 @@ function RouteComponent() {
 				date: new Date().toISOString().split("T")[0],
 				received_time: new Date().toISOString().slice(0, 16),
 				recipe_id: "",
-				schools: schools.map((s) => ({
+				schools: [],
+			},
+		});
+
+	const { fields, append, update } = useFieldArray({
+		control,
+		name: "schools",
+	});
+
+	useEffect(() => {
+		if (schools.length > 0 && fields.length === 0) {
+			append(
+				schools.map((s) => ({
 					school_id: s.id,
 					school_name: s.name,
 					portion: 0,
 				})),
-			},
-		});
-
-	const { fields, update } = useFieldArray({
-		control,
-		name: "schools",
-	});
+			);
+		}
+	}, [schools, fields.length, append]);
 
 	const watchedSchools = watch("schools");
 
@@ -164,15 +172,13 @@ function RouteComponent() {
 			const mealPlans = data.schools
 				.filter((s) => s.portion > 0)
 				.map((school) => ({
-					date: new Date(data.date),
+					date: new Date(data.date + "T00:00:00.000Z"),
 					received_time: new Date(data.received_time).toISOString(),
 					status: "PENDING" as const,
-					portion: school.portion,
+					portion: Number(school.portion),
 					receipt_photo: "",
 					school_id: school.school_id,
 					recipe_id: data.recipe_id,
-					receiver_id: "",
-					sender_id: "",
 				}));
 
 			const res = await api["meal-plans"].$post({ json: mealPlans });
@@ -207,10 +213,12 @@ function RouteComponent() {
 							<FieldLabel>Date</FieldLabel>
 							<Input type="date" {...register("date")} />
 						</Field>
+
 						<Field>
 							<FieldLabel>Received Time</FieldLabel>
 							<Input type="datetime-local" {...register("received_time")} />
 						</Field>
+
 						<Field>
 							<FieldLabel>Recipe</FieldLabel>
 							<Select
@@ -235,7 +243,7 @@ function RouteComponent() {
 
 						<Field>
 							<FieldLabel>Schools & Portions</FieldLabel>
-							<div className="border rounded-md max-h-[400px] overflow-y-auto">
+							<div className="border rounded-md max-h-100 overflow-y-auto">
 								{fields.map((field, index) => (
 									<div
 										key={field.id}

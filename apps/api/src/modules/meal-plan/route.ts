@@ -9,7 +9,12 @@ import { prisma } from "../../utils/prisma.js";
 
 export const mealPlanRoute = new Hono()
 	.get("/", async (c) => {
-		const mealPlans = await prisma.mealPlan.findMany();
+		const mealPlans = await prisma.mealPlan.findMany({
+			include: {
+				school: true,
+				recipe: true,
+			},
+		});
 		return c.json({ meal_plans: mealPlans });
 	})
 	.post("/", zValidator("json", createMealPlansSchema), async (c) => {

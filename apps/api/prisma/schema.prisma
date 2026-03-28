@@ -108,7 +108,7 @@ model Log {
 model MealPlan {
   id String @id @default(uuid())
   date DateTime
-  received_time DateTime
+  received_time DateTime? 
   status Status
   portion Int
 
@@ -125,8 +125,8 @@ model MealPlan {
   receiver_id String?
   receiver User? @relation("receivers", fields: [receiver_id], references: [id])
  
-  sender_id String
-  sender User @relation("senders", fields: [sender_id], references: [id])
+  sender_id String?
+  sender User? @relation("senders", fields: [sender_id], references: [id])
 }
 
 enum Status {

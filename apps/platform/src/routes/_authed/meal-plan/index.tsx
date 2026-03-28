@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import type React from "react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -30,13 +30,40 @@ export const Route = createFileRoute("/_authed/meal-plan/")({
 	},
 });
 
+type School = {
+	id: string;
+	name: string;
+	address: string;
+};
+
+type Recipe = {
+	id: string;
+	name: string;
+	instruction: string;
+};
+
+type MealPlanWithRelations = {
+	id: string;
+	date: string;
+	status: string;
+	portion: number;
+	school_id: string;
+	recipe_id: string;
+	school?: School;
+	recipe?: Recipe;
+};
+
 function MealPlanPage() {
-	const { data: { meal_plans = [] } = {}, isLoading } = useGetMealPlansQuery();
+	const { data, isLoading } = useGetMealPlansQuery();
+	const meal_plans: MealPlanWithRelations[] = data?.meal_plans ?? [];
 
 	return (
 		<div className="flex flex-col gap-4">
 			<div className="flex items-center justify-between">
 				<h1 className="text-2xl font-bold">Meal Plans</h1>
+				<Link to="/meal-plan/create">
+					<Button>Create Meal Plan</Button>
+				</Link>
 			</div>
 
 			{isLoading ? (
@@ -46,11 +73,10 @@ function MealPlanPage() {
 					<TableHeader>
 						<TableRow>
 							<TableHead>Date</TableHead>
-							<TableHead>Received Time</TableHead>
 							<TableHead>Status</TableHead>
 							<TableHead>Portion</TableHead>
-							<TableHead>School ID</TableHead>
-							<TableHead>Recipe ID</TableHead>
+							<TableHead>School</TableHead>
+							<TableHead>Menu</TableHead>
 							<TableHead>Actions</TableHead>
 						</TableRow>
 					</TableHeader>
@@ -60,17 +86,11 @@ function MealPlanPage() {
 								<TableCell>
 									{new Date(mealPlan.date).toLocaleDateString()}
 								</TableCell>
-								<TableCell>
-									{new Date(mealPlan.received_time).toLocaleString()}
-								</TableCell>
+
 								<TableCell>{mealPlan.status}</TableCell>
 								<TableCell>{mealPlan.portion}</TableCell>
-								<TableCell className="truncate max-w-[100px]">
-									{mealPlan.school_id}
-								</TableCell>
-								<TableCell className="truncate max-w-[100px]">
-									{mealPlan.recipe_id}
-								</TableCell>
+								<TableCell>{mealPlan.school?.name || "-"}</TableCell>
+								<TableCell>{mealPlan.recipe?.name || "-"}</TableCell>
 								<TableCell className="flex gap-2">
 									<DeleteMealPlanModal id={mealPlan.id} />
 								</TableCell>
