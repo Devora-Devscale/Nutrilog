@@ -1,6 +1,12 @@
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
+import {
+	createSchoolSchema,
+	type UpdateSchoolInput,
+	updateSchoolSchema,
+} from "@nutrilog/schema";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { toast } from "sonner";
+import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -9,6 +15,7 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
 	Table,
@@ -35,82 +42,12 @@ export const Route = createFileRoute("/_authed/school/")({
 
 function SchoolPage() {
 	const { data: schools = [], isLoading } = useGetSchools();
-	const createSchool = useCreateSchool();
-	const updateSchool = useUpdateSchool();
-	const deleteSchool = useDeleteSchool();
-
-	const [openCreate, setOpenCreate] = useState(false);
-	const [openEdit, setOpenEdit] = useState(false);
-	const [selectedSchool, setSelectedSchool] = useState<{
-		id: string;
-		name: string;
-		address: string;
-	} | null>(null);
-	const [form, setForm] = useState({ name: "", address: "" });
-
-	const handleCreate = () => {
-		createSchool.mutate(form, {
-			onSuccess: () => {
-				toast.success("School created!");
-				setOpenCreate(false);
-				setForm({ name: "", address: "" });
-			},
-			onError: () => toast.error("Failed to create school"),
-		});
-	};
-
-	const handleUpdate = () => {
-		if (!selectedSchool) return;
-		updateSchool.mutate(
-			{ id: selectedSchool.id, data: form },
-			{
-				onSuccess: () => {
-					toast.success("School updated!");
-					setOpenEdit(false);
-					setForm({ name: "", address: "" });
-				},
-				onError: () => toast.error("Failed to update school"),
-			},
-		);
-	};
-
-	const handleDelete = (id: string) => {
-		if (!confirm("Are you sure you want to delete this school?")) return;
-		deleteSchool.mutate(id, {
-			onSuccess: () => toast.success("School deleted!"),
-			onError: () => toast.error("Failed to delete school"),
-		});
-	};
 
 	return (
 		<div className="flex flex-col gap-4">
 			<div className="flex items-center justify-between">
 				<h1 className="text-2xl font-bold">Schools</h1>
-				<Dialog open={openCreate} onOpenChange={setOpenCreate}>
-					<DialogTrigger asChild>
-						<Button>Add School</Button>
-					</DialogTrigger>
-					<DialogContent>
-						<DialogHeader>
-							<DialogTitle>Add New School</DialogTitle>
-						</DialogHeader>
-						<div className="flex flex-col gap-3">
-							<Input
-								placeholder="School name"
-								value={form.name}
-								onChange={(e) => setForm({ ...form, name: e.target.value })}
-							/>
-							<Textarea
-								placeholder="Address"
-								value={form.address}
-								onChange={(e) => setForm({ ...form, address: e.target.value })}
-							/>
-							<Button onClick={handleCreate} disabled={createSchool.isPending}>
-								{createSchool.isPending ? "Saving..." : "Save"}
-							</Button>
-						</div>
-					</DialogContent>
-				</Dialog>
+				<CreateSchoolDialog />
 			</div>
 
 			{isLoading ? (
@@ -125,80 +62,158 @@ function SchoolPage() {
 						</TableRow>
 					</TableHeader>
 					<TableBody>
-						{schools.map(
-							(school: { id: string; name: string; address: string }) => (
-								<TableRow key={school.id}>
-									<TableCell>{school.name}</TableCell>
-									<TableCell>{school.address}</TableCell>
-									<TableCell className="flex gap-2">
-										<Dialog
-											open={openEdit && selectedSchool?.id === school.id}
-											onOpenChange={(open) => {
-												setOpenEdit(open);
-												if (!open) setSelectedSchool(null);
-											}}
-										>
-											<DialogTrigger asChild>
-												<Button
-													variant="outline"
-													size="sm"
-													onClick={() => {
-														setSelectedSchool(school);
-														setForm({
-															name: school.name,
-															address: school.address,
-														});
-														setOpenEdit(true);
-													}}
-												>
-													Edit
-												</Button>
-											</DialogTrigger>
-											<DialogContent>
-												<DialogHeader>
-													<DialogTitle>Edit School</DialogTitle>
-												</DialogHeader>
-												<div className="flex flex-col gap-3">
-													<Input
-														placeholder="School name"
-														value={form.name}
-														onChange={(e) =>
-															setForm({ ...form, name: e.target.value })
-														}
-													/>
-													<Input
-														placeholder="Address"
-														value={form.address}
-														onChange={(e) =>
-															setForm({ ...form, address: e.target.value })
-														}
-													/>
-													<Button
-														onClick={handleUpdate}
-														disabled={updateSchool.isPending}
-													>
-														{updateSchool.isPending
-															? "Saving..."
-															: "Save Changes"}
-													</Button>
-												</div>
-											</DialogContent>
-										</Dialog>
-										<Button
-											variant="destructive"
-											size="sm"
-											onClick={() => handleDelete(school.id)}
-											disabled={deleteSchool.isPending}
-										>
-											Delete
-										</Button>
-									</TableCell>
-								</TableRow>
-							),
-						)}
+						{schools.map((school) => (
+							<TableRow key={school.id}>
+								<TableCell>{school.name}</TableCell>
+								<TableCell>{school.address}</TableCell>
+								<TableCell className="flex gap-2">
+									<UpdateSchoolDialog data={school} />
+									<DeleteSchoolDialog data={school} />
+
+								</TableCell>
+							</TableRow>
+						))}
 					</TableBody>
 				</Table>
 			)}
 		</div>
 	);
 }
+const CreateSchoolDialog = () => {
+	const [openCreate, setOpenCreate] = useState(false);
+	const {
+		reset,
+		register,
+		formState: { errors },
+		handleSubmit,
+	} = useForm({
+		defaultValues: {
+			name: "",
+			address: "",
+		},
+		resolver: standardSchemaResolver(createSchoolSchema),
+	});
+	const { mutateAsync, isPending } = useCreateSchool();
+
+	const handleCreate = handleSubmit(async (data) => {
+		await mutateAsync(data);
+		setOpenCreate(false);
+		reset();
+	});
+	return (
+		<Dialog open={openCreate} onOpenChange={setOpenCreate}>
+			<DialogTrigger asChild>
+				<Button size={"sm"}>Add School</Button>
+			</DialogTrigger>
+			<DialogContent>
+				<DialogHeader>
+					<DialogTitle>Add New School</DialogTitle>
+				</DialogHeader>
+				<div className="flex flex-col gap-3">
+					<Field>
+						<FieldLabel>School Name</FieldLabel>
+						<Input placeholder="School name" {...register("name")} />
+						{errors.name?.message && (
+							<FieldError>{errors.name?.message}</FieldError>
+						)}
+					</Field>
+					<Field>
+						<FieldLabel>Address</FieldLabel>
+						<Textarea placeholder="Address" {...register("address")} />
+						{errors.address?.message && (
+							<FieldError>{errors.address?.message}</FieldError>
+						)}
+					</Field>
+					<Button onClick={handleCreate} disabled={isPending}>
+						{isPending ? "Saving..." : "Save"}
+					</Button>
+				</div>
+			</DialogContent>
+		</Dialog>
+	);
+};
+const UpdateSchoolDialog = ({ data }: { data: UpdateSchoolInput }) => {
+	const [openUpdate, setOpenUpdate] = useState(false);
+	const {
+		reset,
+		register,
+		formState: { errors },
+		handleSubmit,
+	} = useForm({
+		defaultValues: {
+			id: data.id,
+			name: data.name,
+			address: data.address,
+		},
+		resolver: standardSchemaResolver(updateSchoolSchema),
+	});
+	const { mutateAsync, isPending } = useUpdateSchool(data.id);
+
+	const handleCreate = handleSubmit(async (data) => {
+		await mutateAsync(data);
+		setOpenUpdate(false);
+		reset();
+	});
+	return (
+		<Dialog open={openUpdate} onOpenChange={setOpenUpdate}>
+			<DialogTrigger asChild>
+				<Button variant={"outline"} size={"sm"}>
+					Edit
+				</Button>
+			</DialogTrigger>
+			<DialogContent>
+				<DialogHeader>
+					<DialogTitle>Update School</DialogTitle>
+				</DialogHeader>
+				<div className="flex flex-col gap-3">
+					<Field>
+						<FieldLabel>School Name</FieldLabel>
+						<Input placeholder="School name" {...register("name")} />
+						{errors.name?.message && (
+							<FieldError>{errors.name?.message}</FieldError>
+						)}
+					</Field>
+					<Field>
+						<FieldLabel>Address</FieldLabel>
+						<Textarea placeholder="Address" {...register("address")} />
+						{errors.address?.message && (
+							<FieldError>{errors.address?.message}</FieldError>
+						)}
+					</Field>
+					<Button onClick={handleCreate} disabled={isPending}>
+						{isPending ? "Saving..." : "Save"}
+					</Button>
+				</div>
+			</DialogContent>
+		</Dialog>
+	);
+};
+const DeleteSchoolDialog = ({ data }: { data: UpdateSchoolInput }) => {
+	const [openDelete, setOpenDelete] = useState(false);
+
+	const { mutateAsync, isPending } = useDeleteSchool(data.id);
+
+	const handleDelete = (async () => {
+		await mutateAsync();
+		setOpenDelete(false);
+	});
+	
+	return (
+		<Dialog open={openDelete} onOpenChange={setOpenDelete}>
+			<DialogTrigger asChild>
+				<Button variant={"destructive"} size={"sm"}>
+					Delete
+				</Button>
+			</DialogTrigger>
+			<DialogContent>
+				<DialogHeader>
+					<DialogTitle>Delete School</DialogTitle>
+				</DialogHeader>
+				Do you want to delete {data.name}?
+				<Button variant={"destructive"} onClick={handleDelete} disabled={isPending}>
+					{isPending ? "Deleting..." : "Delete"}
+				</Button>
+			</DialogContent>
+		</Dialog>
+	);
+};

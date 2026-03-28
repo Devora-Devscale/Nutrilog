@@ -5,7 +5,9 @@ export const createSchoolSchema = z.object({
 	address: z.string().min(1, "Address is required"),
 });
 
-export const updateSchoolSchema = createSchoolSchema.partial();
+export const updateSchoolSchema = createSchoolSchema.extend({
+	id: z.uuid(),
+});
 
 export type CreateSchoolInput = z.infer<typeof createSchoolSchema>;
 export type UpdateSchoolInput = z.infer<typeof updateSchoolSchema>;

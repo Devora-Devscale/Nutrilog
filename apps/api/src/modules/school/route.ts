@@ -2,7 +2,9 @@ import { zValidator } from "@hono/zod-validator";
 import { createSchoolSchema, updateSchoolSchema } from "@nutrilog/schema";
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
-import { schoolService } from "./school.service.js";
+import z from "zod";
+import { prisma } from "../../utils/prisma.js";
+import { schoolService } from "./service.js";
 
 export const schoolRoute = new Hono()
 	.get("/", async (c) => {
@@ -46,16 +48,17 @@ export const schoolRoute = new Hono()
 			throw new HTTPException(400, { message: "Failed to update school" });
 		}
 	})
-	.delete("/:id", async (c) => {
-		const id = c.req.param("id");
-		try {
-			await schoolService.delete(id);
+	.delete(
+		"/:id",
+		zValidator("param", z.object({ id: z.uuid()})),
+		async (c) => {
+			const { id } = c.req.valid("param");
+			await prisma.school.delete({
+				where: { id },
+			});
 			return c.json({
 				success: true,
 				data: { message: "School deleted successfully" },
 			});
-		} catch (error) {
-			console.error(error);
-			throw new HTTPException(400, { message: "Failed to delete school" });
-		}
-	});
+		},
+	);

@@ -25,8 +25,12 @@ export const schoolService = {
 	},
 
 	delete: async (id: string) => {
+		console.log("ini adalah petualangan");
+
 		return await prisma.school.delete({
-			where: { id },
+			where: {
+				id,
+			},
 		});
 	},
 };

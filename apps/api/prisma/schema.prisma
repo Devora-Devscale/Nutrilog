@@ -117,7 +117,7 @@ model MealPlan {
   created_at DateTime @default(now())
   
   school_id String
-  school School @relation(fields: [school_id], references: [id])
+  school School @relation(fields: [school_id], references: [id], onDelete: Cascade)
   
   recipe_id String
   recipe Recipe @relation(fields: [recipe_id], references: [id])

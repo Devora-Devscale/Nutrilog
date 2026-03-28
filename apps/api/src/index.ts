@@ -18,9 +18,9 @@ import { ingredientTransactionRoute } from "./modules/ingredient-transaction/rou
 import { mealPlanRoute } from "./modules/meal-plan/route.js";
 import { profileRoute } from "./modules/profile/route.js";
 import { recipeRoute } from "./modules/recipe/route.js";
-import { schoolRoute } from "./modules/school/school.route.js";
+import { schoolRoute } from "./modules/school/route.js";
 import { unitRoute } from "./modules/unit/route.js";
-import { userRoute } from "./modules/user/user.route.js";
+import { userRoute } from "./modules/user/route.js";
 import type { HonoContext } from "./types.js";
 
 const app = new Hono<HonoContext>()
