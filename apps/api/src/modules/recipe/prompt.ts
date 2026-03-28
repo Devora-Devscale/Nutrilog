@@ -1,3 +1,0 @@
-export const SYSTEM_PROMPT = `
-YOUR PROMPT HERE
-`;
