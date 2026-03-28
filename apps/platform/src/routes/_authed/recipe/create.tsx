@@ -21,7 +21,7 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { useGetIngredients } from "@/modules/ingredient/hooks/useIngredient";
+import { useGetIngredients } from "@/modules/ingredient/useIngredient";
 import { api } from "@/utils/api";
 
 export const Route = createFileRoute("/_authed/recipe/create")({

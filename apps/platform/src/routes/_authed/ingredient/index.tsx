@@ -43,7 +43,7 @@ import {
 	useDeleteIngredient,
 	useGetIngredients,
 	// useUpdateIngredient,
-} from "@/modules/ingredient/hooks/useIngredient";
+} from "@/modules/ingredient/useIngredient";
 import { useGetUnitsQuery } from "@/routes/_authed/unit/-hook";
 import { api } from "@/utils/api";
 
