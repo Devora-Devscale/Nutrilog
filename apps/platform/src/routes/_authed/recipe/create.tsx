@@ -2,7 +2,8 @@ import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { type CreateRecipeInput, createRecipeSchema } from "@nutrilog/schema";
 import { useMutation } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { PlusIcon, Trash2Icon } from "lucide-react";
+import { PlusIcon, Trash2Icon, Wand2Icon } from "lucide-react";
+import { useState } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -36,6 +37,8 @@ export const Route = createFileRoute("/_authed/recipe/create")({
 });
 
 function RouteComponent() {
+	const [isGenerating, setIsGenerating] = useState(false);
+
 	const { data: ingredients } = useGetIngredients();
 	const {
 		register,
@@ -43,6 +46,8 @@ function RouteComponent() {
 		control,
 		formState: { errors },
 		handleSubmit,
+		setValue,
+		watch,
 	} = useForm({
 		defaultValues: {
 			name: "",
@@ -60,6 +65,24 @@ function RouteComponent() {
 		control,
 		name: "ingredients",
 	});
+
+	const recipeName = watch("name");
+
+	// Generate instruction mutation
+	const generateMutation = useMutation({
+		mutationFn: async (name: string) => {
+			const response = await api.recipes.instruction.$post({ json: { name } });
+
+			if (!response.ok) {
+				const error = await response.json();
+				throw new Error(error.message || "Gagal generate instruksi");
+			}
+
+			const result = await response.json();
+			return result.data?.instruction || "";
+		},
+	});
+
 	const { mutateAsync, isPending } = useMutation({
 		mutationKey: ["recipe", "create"],
 		mutationFn: async (data: CreateRecipeInput) => {
@@ -70,23 +93,67 @@ function RouteComponent() {
 			reset();
 		},
 	});
+
+	const handleGenerateInstruction = async () => {
+		if (!recipeName?.trim()) {
+			toast.error("Masukkan nama resep terlebih dahulu");
+			return;
+		}
+
+		setIsGenerating(true);
+		try {
+			const instruction = await generateMutation.mutateAsync(recipeName);
+			setValue("instruction", instruction);
+			toast.success("Instruksi berhasil digenerate!");
+		} catch (error) {
+			console.error("AI generation error:", error);
+			toast.error(
+				error instanceof Error ? error.message : "Gagal generate instruksi",
+			);
+		} finally {
+			setIsGenerating(false);
+		}
+	};
+
 	const onSubmit = handleSubmit(async (data) => {
 		await mutateAsync(data);
 	});
+
 	return (
 		<div>
 			<form onSubmit={onSubmit}>
 				<FieldGroup>
 					<Field>
 						<FieldLabel htmlFor="name">Name</FieldLabel>
-						<Input {...register("name")} />
+						<Input
+							{...register("name")}
+							placeholder="Contoh: Sayur Sop, Sate Ayam, dll"
+						/>
 						{errors.name?.message && (
 							<FieldError>{errors.name?.message}</FieldError>
 						)}
 					</Field>
 					<Field>
-						<FieldLabel htmlFor="instruction">Instruction</FieldLabel>
-						<Textarea {...register("instruction")} />
+						<div className="flex items-center justify-between mb-2">
+							<FieldLabel htmlFor="instruction">Instruction</FieldLabel>
+							<Button
+								type="button"
+								variant="outline"
+								size="sm"
+								onClick={handleGenerateInstruction}
+								disabled={isGenerating || !recipeName?.trim()}
+								className="flex items-center gap-2"
+							>
+								<Wand2Icon className="size-4" />
+								{isGenerating ? "Generating..." : "Generate AI"}
+							</Button>
+						</div>
+						<Textarea
+							{...register("instruction")}
+							placeholder="Instruksi memasak akan muncul di sini setelah di-generate oleh AI"
+							rows={10}
+							className="min-h-[200px]"
+						/>
 						{errors.instruction?.message && (
 							<FieldError>{errors.instruction?.message}</FieldError>
 						)}

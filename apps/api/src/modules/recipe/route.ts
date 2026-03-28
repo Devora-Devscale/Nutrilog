@@ -6,6 +6,7 @@ import {
 } from "@nutrilog/schema";
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
+import { generateRecipeInstruction } from "./ai.js";
 import {
 	createRecipe,
 	deleteRecipes,
@@ -24,9 +25,27 @@ export const recipeRoute = new Hono()
 			throw new HTTPException(400, { message: "Failed to create recipe" });
 		}
 	})
-	.post("/instruction", zValidator("json", generateInstruction), async (_c) => {
-		// TODO: Implement AI instruction generation
-		return _c.json({ success: true, data: { instruction: "" } });
+	.post("/instruction", zValidator("json", generateInstruction), async (c) => {
+		const { name } = c.req.valid("json");
+		try {
+			console.log("=== GENERATE INSTRUCTION REQUEST ===");
+			console.log("Recipe name:", name);
+			const instruction = await generateRecipeInstruction(name);
+			console.log("=== GENERATE SUCCESS ===");
+			return c.json({ success: true, data: { instruction } });
+		} catch (error) {
+			console.error("=== GENERATE ERROR ===");
+			console.error(error);
+			if (error instanceof HTTPException) {
+				throw error;
+			}
+			throw new HTTPException(500, {
+				message:
+					error instanceof Error
+						? error.message
+						: "Failed to generate instruction",
+			});
+		}
 	})
 	.get("/", async (c) => {
 		try {
