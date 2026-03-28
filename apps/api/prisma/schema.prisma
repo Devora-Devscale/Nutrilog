@@ -73,6 +73,7 @@ model Recipe {
   instruction String
   created_at DateTime @default(now())
   ingredientRecipes IngredientRecipe[]
+  mealPlans MealPlan[]
 }
 
 model IngredientRecipe {
@@ -117,9 +118,12 @@ model MealPlan {
   
   school_id String
   school School @relation(fields: [school_id], references: [id])
- 
-  receiver_id String
-  receiver User @relation("receivers", fields: [receiver_id], references: [id])
+  
+  recipe_id String
+  recipe Recipe @relation(fields: [recipe_id], references: [id])
+
+  receiver_id String?
+  receiver User? @relation("receivers", fields: [receiver_id], references: [id])
  
   sender_id String
   sender User @relation("senders", fields: [sender_id], references: [id])

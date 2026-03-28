@@ -1,3 +1,4 @@
+import type { UpdateIngredientInput } from "@nutrilog/schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/utils/api";
 
@@ -5,7 +6,7 @@ export const useGetIngredientTransactions = () => {
 	return useQuery({
 		queryKey: ["ingredientTransactions"],
 		queryFn: async () => {
-			const res = await api.ingredientTransactions.$get();
+			const res = await api["ingredient-transactions"].$get();
 			return await res.json();
 		},
 	});
@@ -20,7 +21,7 @@ export const useCreateIngredientTransaction = () => {
 			current_stock: number;
 			ingredient_id: string;
 		}) => {
-			const res = await api.ingredientTransactions.$post({ json: data });
+			const res = await api["ingredient-transactions"].$post({ json: data });
 			return await res.json();
 		},
 		onSuccess: () => {
@@ -37,14 +38,9 @@ export const useUpdateIngredientTransaction = () => {
 			data,
 		}: {
 			id: string;
-			data: {
-				out?: number;
-				in?: number;
-				current_stock?: number;
-				ingredient_id?: string;
-			};
+			data: UpdateIngredientInput;
 		}) => {
-			const res = await api.ingredientTransactions[":id"].$patch({
+			const res = await api["ingredient-transactions"][":id"].$patch({
 				param: { id },
 				json: data,
 			});
@@ -60,7 +56,7 @@ export const useDeleteIngredientTransaction = () => {
 	const queryClient = useQueryClient();
 	return useMutation({
 		mutationFn: async (id: string) => {
-			const res = await api.ingredientTransactions[":id"].$delete({
+			const res = await api["ingredient-transactions"][":id"].$delete({
 				param: { id },
 			});
 			return await res.json();

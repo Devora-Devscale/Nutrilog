@@ -9,10 +9,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import {
-	useDeleteRecipe,
-	useGetRecipes,
-} from "@/modules/recipe/hooks/useRecipe";
+import { useDeleteRecipe, useGetRecipes } from "@/modules/recipe/useRecipe";
 
 export const Route = createFileRoute("/_authed/recipe/")({
 	component: RecipePage,

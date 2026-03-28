@@ -28,6 +28,13 @@ export async function createRecipe(data: CreateRecipeInput) {
 export async function getRecipes(id?: string) {
 	return prisma.recipe.findMany({
 		where: id ? { id } : undefined,
+		include: {
+			ingredientRecipes: {
+				include: {
+					ingredient: true,
+				},
+			},
+		},
 	});
 }
 

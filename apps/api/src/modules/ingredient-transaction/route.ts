@@ -44,6 +44,7 @@ export const ingredientTransactionRoute = new Hono()
 			return c.json({ ingredientTransaction });
 		},
 	)
+
 	.delete("/:id", zValidator("param", paramSchema), async (c) => {
 		const { id } = c.req.valid("param");
 		const ingredientTransaction = await deleteIngredientTransactionById(id);

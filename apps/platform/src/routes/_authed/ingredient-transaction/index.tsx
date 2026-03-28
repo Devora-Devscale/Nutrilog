@@ -46,7 +46,10 @@ type IngredientTransaction = {
 const defaultForm = { out: 0, in: 0, current_stock: 0, ingredient_id: "" };
 
 function IngredientTransactionPage() {
-	const { data, isLoading } = useGetIngredientTransactions();
+	const {
+		data: { ingredientTransactions: transactions = [] } = {},
+		isLoading,
+	} = useGetIngredientTransactions();
 	const createTransaction = useCreateIngredientTransaction();
 	const updateTransaction = useUpdateIngredientTransaction();
 	const deleteTransaction = useDeleteIngredientTransaction();
@@ -56,14 +59,10 @@ function IngredientTransactionPage() {
 	const [selected, setSelected] = useState<IngredientTransaction | null>(null);
 	const [form, setForm] = useState(defaultForm);
 
-	const transactions =
-		(data as { ingredientTransactions: IngredientTransaction[] })
-			?.ingredientTransactions ?? [];
-
 	const handleCreate = () => {
 		createTransaction.mutate(form, {
 			onSuccess: () => {
-				toast.success("Transaction created!");
+				toast.success("Success input stock!");
 				setOpenCreate(false);
 				setForm(defaultForm);
 			},
@@ -77,7 +76,7 @@ function IngredientTransactionPage() {
 			{ id: selected.id, data: form },
 			{
 				onSuccess: () => {
-					toast.success("Transaction updated!");
+					toast.success("Stock updated!");
 					setOpenEdit(false);
 					setForm(defaultForm);
 				},
@@ -104,7 +103,7 @@ function IngredientTransactionPage() {
 					</DialogTrigger>
 					<DialogContent>
 						<DialogHeader>
-							<DialogTitle>Add New Transaction</DialogTitle>
+							<DialogTitle>Add New Stock</DialogTitle>
 						</DialogHeader>
 						<div className="flex flex-col gap-3">
 							<Input
@@ -197,7 +196,7 @@ function IngredientTransactionPage() {
 										</DialogTrigger>
 										<DialogContent>
 											<DialogHeader>
-												<DialogTitle>Edit Transaction</DialogTitle>
+												<DialogTitle>Edit Stock</DialogTitle>
 											</DialogHeader>
 											<div className="flex flex-col gap-3">
 												<Input

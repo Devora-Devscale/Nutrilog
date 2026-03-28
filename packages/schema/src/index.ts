@@ -17,6 +17,14 @@ export {
 	updateIngredientTransactionSchema,
 } from "./modules/ingredient-transaction/schema.js";
 export type {
+	CreateMealPlanInput,
+	UpdateMealPlanInput,
+} from "./modules/meal-plan/schema.js";
+export {
+	createMealPlanSchema,
+	updateMealPlanSchema,
+} from "./modules/meal-plan/schema.js";
+export type {
 	CreateRecipeInput,
 	GenerateInstructionType,
 	UpdateRecipeInput,
