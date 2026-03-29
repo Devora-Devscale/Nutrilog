@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -172,7 +172,7 @@ function RouteComponent() {
 			const mealPlans = data.schools
 				.filter((s) => s.portion > 0)
 				.map((school) => ({
-					date: new Date(`${data.date}T00:00:00.000Z`),
+					date: new Date(`${data.date}T00:00:00.000Z`).toISOString(),
 					received_time: new Date(data.received_time).toISOString(),
 					status: "PENDING" as const,
 					portion: Number(school.portion),
@@ -192,9 +192,12 @@ function RouteComponent() {
 			toast.error("Failed to create meal plans");
 		},
 	});
-
+	const navigate = useNavigate();
 	const onSubmit = handleSubmit(async (data) => {
 		await mutateAsync(data);
+		navigate({
+			to: "/meal-plan",
+		});
 	});
 
 	const handlePortionChange = (index: number, value: string) => {

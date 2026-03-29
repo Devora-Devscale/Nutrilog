@@ -1,7 +1,7 @@
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { type CreateRecipeInput, createRecipeSchema } from "@nutrilog/schema";
 import { useMutation } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { PlusIcon, Trash2Icon, Wand2Icon } from "lucide-react";
 import { useState } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
@@ -114,9 +114,13 @@ function RouteComponent() {
 			setIsGenerating(false);
 		}
 	};
+	const navigate = useNavigate();
 
 	const onSubmit = handleSubmit(async (data) => {
 		await mutateAsync(data);
+		navigate({
+			to: "/recipe",
+		});
 	});
 
 	return (

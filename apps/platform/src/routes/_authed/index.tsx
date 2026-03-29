@@ -151,7 +151,7 @@ function RouteComponent() {
 						{days.map((day, index) => (
 							<div
 								key={`${currentDate.getMonth()}-${day ?? "empty"}-${index}`}
-								className={`p-2 min-h-[60px] border rounded ${
+								className={`p-2 min-h-15 border rounded ${
 									day === today.getDate() &&
 									currentDate.getMonth() === today.getMonth() &&
 									currentDate.getFullYear() === today.getFullYear()
