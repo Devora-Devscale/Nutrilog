@@ -5,7 +5,17 @@ import type {
 import { prisma } from "../../utils/prisma.js";
 
 export const getIngredientTransactions = async () => {
-	return await prisma.ingredientTransaction.findMany();
+	return await prisma.ingredientTransaction.findMany({
+		select: {
+			ingredient: true,
+			id: true,
+			in: true,
+			out: true,
+			current_stock: true,
+			ingredient_id: true,
+			created_at: true,
+		},
+	});
 };
 export const createIngredientTransaction = async (
 	data: IngredientTransactionUncheckedCreateInput,

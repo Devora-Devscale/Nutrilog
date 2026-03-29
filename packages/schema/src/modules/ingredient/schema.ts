@@ -4,7 +4,6 @@ export const updateIngredientSchema = z.object({
 	id: z.uuid(),
 	name: z.string(),
 	minimum: z.int(),
-	stock: z.int(),
 	unit_id: z.uuid(),
 });
 

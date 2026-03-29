@@ -24,7 +24,7 @@ export const ingredientRoute = new Hono()
 	.post("/", zValidator("json", createIngredientSchema), async (c) => {
 		const data = c.req.valid("json");
 		const ingredient = await prisma.ingredient.create({
-			data,
+			data: { ...data, stock: 0 },
 		});
 		return c.json({ ingredient });
 	})

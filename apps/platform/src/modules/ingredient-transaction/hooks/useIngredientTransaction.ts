@@ -4,7 +4,7 @@ import { api } from "@/utils/api";
 
 export const useGetIngredientTransactions = () => {
 	return useQuery({
-		queryKey: ["ingredientTransactions"],
+		queryKey: ["ingredient-transactions"],
 		queryFn: async () => {
 			const res = await api["ingredient-transactions"].$get();
 			return await res.json();

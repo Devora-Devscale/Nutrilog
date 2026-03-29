@@ -12,6 +12,10 @@ export {
 	createIngredientSchema,
 	updateIngredientSchema,
 } from "./modules/ingredient/schema.js";
+export type {
+	CreateIngredientTransactionInput,
+	UpdateIngredientTransactionInput,
+} from "./modules/ingredient-transaction/schema.js";
 export {
 	createIngredientTransactionSchema,
 	updateIngredientTransactionSchema,

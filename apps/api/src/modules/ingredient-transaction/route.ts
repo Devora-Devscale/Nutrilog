@@ -5,6 +5,7 @@ import {
 } from "@nutrilog/schema";
 import { Hono } from "hono";
 import z from "zod";
+import { prisma } from "../../utils/prisma.js";
 import {
 	createIngredientTransaction,
 	deleteIngredientTransactionById,
@@ -29,7 +30,21 @@ export const ingredientTransactionRoute = new Hono()
 		zValidator("json", createIngredientTransactionSchema),
 		async (c) => {
 			const data = c.req.valid("json");
-			const ingredientTransaction = await createIngredientTransaction(data);
+			const ingredient = await prisma.ingredient.findFirstOrThrow({
+				where: { id: data.ingredient_id },
+			});
+
+			const current_stock = ingredient?.stock + data.in - data.out;
+			const ingredientTransaction = await createIngredientTransaction({
+				...data,
+				current_stock,
+			});
+
+			await prisma.ingredient.update({
+				where: { id: data.ingredient_id },
+				data: { stock: current_stock },
+			});
+
 			return c.json({ ingredientTransaction });
 		},
 	)
