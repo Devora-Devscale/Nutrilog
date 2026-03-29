@@ -1,6 +1,14 @@
+import type { Recipe } from "@nutrilog/api/dist/src/generated/prisma/client";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { toast } from "sonner";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import {
+	Dialog,
+	DialogContent,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from "@/components/ui/dialog";
 import {
 	Table,
 	TableBody,
@@ -13,19 +21,16 @@ import { useDeleteRecipe, useGetRecipes } from "@/modules/recipe/useRecipe";
 
 export const Route = createFileRoute("/_authed/recipe/")({
 	component: RecipePage,
+	staticData: {
+		crumb: {
+			module: "Recipe",
+		},
+	},
 });
 
 function RecipePage() {
 	const { data: recipes = [], isLoading } = useGetRecipes();
-	const deleteRecipe = useDeleteRecipe();
 
-	const handleDelete = (id: string) => {
-		if (!confirm("Are you sure you want to delete this recipe?")) return;
-		deleteRecipe.mutate(id, {
-			onSuccess: () => toast.success("Recipe deleted!"),
-			onError: () => toast.error("Failed to delete recipe"),
-		});
-	};
 	return (
 		<div className="flex flex-col gap-4">
 			<div className="flex items-center justify-between">
@@ -48,43 +53,15 @@ function RecipePage() {
 					<TableBody>
 						{recipes.map((recipe) => (
 							<TableRow key={recipe.id}>
-								<TableCell className="font-medium">{recipe.name}</TableCell>
+								<TableCell>{recipe.name}</TableCell>
 								<TableCell className="flex gap-2">
-									{/* <Dialog
-										open={openEdit && selectedRecipe?.id === recipe.id}
-										onOpenChange={(open) => {
-											setOpenEdit(open);
-											if (!open) setSelectedRecipe(null);
-										}}
-									>
-										<DialogTrigger asChild>
-											<Button
-												variant="outline"
-												size="sm"
-												onClick={() => openEditDialog(recipe)}
-											>
-												Edit
-											</Button>
-										</DialogTrigger>
-										<DialogContent>
-											<DialogHeader>
-												<DialogTitle>Edit Recipe</DialogTitle>
-											</DialogHeader>
-											<RecipeForm
-												onSubmit={handleUpdate}
-												submitLabel="Save Changes"
-												isPending={updateRecipe.isPending}
-											/>
-										</DialogContent>
-									</Dialog> */}
-									<Button
-										variant="destructive"
-										size="sm"
-										onClick={() => handleDelete(recipe.id)}
-										disabled={deleteRecipe.isPending}
-									>
-										Delete
-									</Button>
+									<Link to="/recipe/$id/detail" params={{ id: recipe.id }}>
+										<Button variant={"outline"} size={"sm"}>
+											View
+										</Button>
+									</Link>
+
+									<DeleteRecipeModal data={recipe} />
 								</TableCell>
 							</TableRow>
 						))}
@@ -94,3 +71,50 @@ function RecipePage() {
 		</div>
 	);
 }
+const DeleteRecipeModal = ({ data }: { data: Omit<Recipe, "created_at"> }) => {
+	const { mutateAsync, isPending } = useDeleteRecipe();
+
+	const [openDelete, setOpenDelete] = useState(false);
+
+	const onDeleteSubmit = async (e: React.MouseEvent) => {
+		e.preventDefault();
+		await mutateAsync(data.id);
+		setOpenDelete(false);
+	};
+	return (
+		<Dialog open={openDelete} onOpenChange={setOpenDelete}>
+			<DialogTrigger asChild>
+				<Button
+					variant={"destructive"}
+					size="sm"
+					onClick={() => setOpenDelete(true)}
+				>
+					Delete
+				</Button>
+			</DialogTrigger>
+			<DialogContent>
+				<DialogHeader>
+					<DialogTitle>
+						Are you sure want to delete {data.name} recipe?
+					</DialogTitle>
+				</DialogHeader>
+				<Button
+					variant={"destructive"}
+					size={"sm"}
+					onClick={onDeleteSubmit}
+					disabled={isPending}
+				>
+					{isPending ? "Deleting..." : "Delete"}
+				</Button>
+				<Button
+					variant={"outline"}
+					size={"sm"}
+					onClick={() => setOpenDelete(false)}
+					disabled={isPending}
+				>
+					Cancel
+				</Button>
+			</DialogContent>
+		</Dialog>
+	);
+};

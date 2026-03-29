@@ -31,6 +31,7 @@ Pastikan instruksi:
 - Praktis dan bisa diikuti oleh pemula
 - Menggunakan bahan-bahan yang umum di Indonesia
 - Langkah-langkah yang logis dan sistematis
+- Berikan jumlah bahan untuk 1 porsi.
 `;
 
 export const generateRecipeInstruction = async (

@@ -24,38 +24,13 @@ export const Route = createFileRoute("/_authed/meal-plan/")({
 	staticData: {
 		crumb: {
 			module: "Meal Plan",
-			action: "List",
-			module_path: "/_authed/meal-plan",
 		},
 	},
 });
 
-type School = {
-	id: string;
-	name: string;
-	address: string;
-};
-
-type Recipe = {
-	id: string;
-	name: string;
-	instruction: string;
-};
-
-type MealPlanWithRelations = {
-	id: string;
-	date: string;
-	status: string;
-	portion: number;
-	school_id: string;
-	recipe_id: string;
-	school?: School;
-	recipe?: Recipe;
-};
-
 function MealPlanPage() {
 	const { data, isLoading } = useGetMealPlansQuery();
-	const meal_plans: MealPlanWithRelations[] = data?.meal_plans ?? [];
+	const meal_plans = data?.meal_plans ?? [];
 
 	return (
 		<div className="flex flex-col gap-4">

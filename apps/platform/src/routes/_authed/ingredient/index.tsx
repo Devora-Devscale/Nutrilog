@@ -49,6 +49,11 @@ import { api } from "@/utils/api";
 
 export const Route = createFileRoute("/_authed/ingredient/")({
 	component: IngredientPage,
+	staticData: {
+		crumb: {
+			module: "Ingredient",
+		},
+	},
 });
 
 // const defaultForm = { name: "", minimum: 0, stock: 0, unit_id: "" };

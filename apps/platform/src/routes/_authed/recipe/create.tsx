@@ -124,7 +124,7 @@ function RouteComponent() {
 			<form onSubmit={onSubmit}>
 				<FieldGroup>
 					<Field>
-						<FieldLabel htmlFor="name">Name</FieldLabel>
+						<FieldLabel htmlFor="name">Recipe Name</FieldLabel>
 						<Input
 							{...register("name")}
 							placeholder="Contoh: Sayur Sop, Sate Ayam, dll"

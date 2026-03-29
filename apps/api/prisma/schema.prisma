@@ -83,7 +83,7 @@ model IngredientRecipe {
   created_at        DateTime @default(now())
   quantity          Int
   ingredient Ingredient @relation(fields: [ingredient_id], references: [id])
-  recipe Recipe @relation(fields: [recipe_id], references: [id])
+  recipe Recipe @relation(fields: [recipe_id], references: [id], onDelete: Cascade)
 }
 
 model IngredientTransaction {
@@ -119,14 +119,14 @@ model MealPlan {
   school_id String
   school School @relation(fields: [school_id], references: [id], onDelete: Cascade)
   
-  recipe_id String
-  recipe Recipe @relation(fields: [recipe_id], references: [id])
+  recipe_id String?
+  recipe Recipe? @relation(fields: [recipe_id], references: [id], onDelete: SetNull)
 
   receiver_id String?
-  receiver User? @relation("receivers", fields: [receiver_id], references: [id])
+  receiver User? @relation("receivers", fields: [receiver_id], references: [id], onDelete: SetNull)
  
   sender_id String?
-  sender User? @relation("senders", fields: [sender_id], references: [id])
+  sender User? @relation("senders", fields: [sender_id], references: [id], onDelete: SetNull)
 }
 
 enum Status {

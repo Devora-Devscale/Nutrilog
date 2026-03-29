@@ -6,6 +6,8 @@ import {
 } from "@nutrilog/schema";
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
+import z from "zod";
+import { prisma } from "../../utils/prisma.js";
 import { generateRecipeInstruction } from "./ai.js";
 import {
 	createRecipe,
@@ -76,4 +78,20 @@ export const recipeRoute = new Hono()
 			console.error(error);
 			throw new HTTPException(400, { message: "Failed to delete recipe" });
 		}
+	})
+	.get("/:id", zValidator("param", z.object({ id: z.uuid() })), async (c) => {
+		const { id } = c.req.valid("param");
+		const recipe = await prisma.recipe.findFirst({
+			where: { id },
+			include: {
+				ingredientRecipes: {
+					include: {
+						ingredient: {
+							include: { unit: true },
+						},
+					},
+				},
+			},
+		});
+		return c.json({ recipe });
 	});

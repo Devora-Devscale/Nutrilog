@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { api } from "@/utils/api";
 
 export const useGetRecipes = () => {
@@ -29,31 +30,31 @@ export const useCreateRecipe = () => {
 	});
 };
 
-export const useUpdateRecipe = () => {
-	const queryClient = useQueryClient();
-	return useMutation({
-		mutationFn: async ({
-			id,
-			data,
-		}: {
-			id: string;
-			data: {
-				name?: string;
-				instruction?: string;
-				ingredients?: Array<{ ingredient_id: string; quantity: string }>;
-			};
-		}) => {
-			const res = await api.recipes[":id"].$put({
-				param: { id },
-				json: data,
-			});
-			return await res.json();
-		},
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ["recipes"] });
-		},
-	});
-};
+// export const useUpdateRecipe = () => {
+// 	const queryClient = useQueryClient();
+// 	return useMutation({
+// 		mutationFn: async ({
+// 			id,
+// 			data,
+// 		}: {
+// 			id: string;
+// 			data: {
+// 				name?: string;
+// 				instruction?: string;
+// 				ingredients?: Array<{ ingredient_id: string; quantity: string }>;
+// 			};
+// 		}) => {
+// 			const res = await api.recipes[":id"].$put({
+// 				param: { id },
+// 				json: data,
+// 			});
+// 			return await res.json();
+// 		},
+// 		onSuccess: () => {
+// 			queryClient.invalidateQueries({ queryKey: ["recipes"] });
+// 		},
+// 	});
+// };
 
 export const useDeleteRecipe = () => {
 	const queryClient = useQueryClient();
@@ -63,6 +64,7 @@ export const useDeleteRecipe = () => {
 			return await res.json();
 		},
 		onSuccess: () => {
+			toast.success("Recipe deleted!");
 			queryClient.invalidateQueries({ queryKey: ["recipes"] });
 		},
 	});

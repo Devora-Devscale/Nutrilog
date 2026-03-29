@@ -36,7 +36,7 @@ import {
 export const Route = createFileRoute("/_authed/unit/")({
 	component: UnitPage,
 	staticData: {
-		crumb: { module: "Unit", action: "List", module_path: "/_authed/unit" },
+		crumb: { module: "Unit" },
 	},
 });
 
