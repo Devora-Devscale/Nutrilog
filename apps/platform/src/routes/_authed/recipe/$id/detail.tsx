@@ -56,10 +56,10 @@ function RouteComponent() {
 
 			<Card>
 				<CardHeader>
-					<CardTitle>Instruksi</CardTitle>
+					<CardTitle>Instruction</CardTitle>
 				</CardHeader>
 				<CardContent>
-					<Textarea value={recipe?.instruction} className="h-100" />
+					<Textarea disabled value={recipe?.instruction} className="h-100" />
 				</CardContent>
 			</Card>
 		</div>
